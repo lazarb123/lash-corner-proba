@@ -173,7 +173,7 @@ body.fs-open { overflow: hidden; }
 .chips.tight .chip { justify-content: center; text-align: center; min-width: 52px; }
 #types { grid-template-columns: minmax(0, 1fr); }
 .chip small { white-space: nowrap; }
-#curls { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); }
+#curls { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); }
 #curls .chip { justify-content: center; }
 
 /* mapa dužina: svaka zona je crna "trepavica" */
@@ -323,7 +323,6 @@ body.fs-open { overflow: hidden; }
         </div></div>
         <div class="row"><p class="label">Tehnika</p><div class="chips cols" id="types">
           <button class="chip" type="button" data-v="classic" aria-pressed="true">Klasika <small>1D</small></button>
-          <button class="chip" type="button" data-v="hybrid" aria-pressed="false">Hybrid <small>1–3D</small></button>
           <button class="chip" type="button" data-v="light" aria-pressed="false">Lagani volumen <small>2–3D</small></button>
           <button class="chip" type="button" data-v="medium" aria-pressed="false">Medium volumen <small>2–5D</small></button>
           <button class="chip" type="button" data-v="mega" aria-pressed="false">Mega volumen <small>6D+</small></button>
@@ -334,6 +333,7 @@ body.fs-open { overflow: hidden; }
             <button class="chip" type="button" data-v="C" aria-pressed="false">C</button>
             <button class="chip" type="button" data-v="CC" aria-pressed="true">CC</button>
             <button class="chip" type="button" data-v="D" aria-pressed="false">D</button>
+            <button class="chip" type="button" data-v="M" aria-pressed="false">M</button>
             <button class="chip" type="button" data-v="L" aria-pressed="false">L</button>
           </div>
           <figure class="profile" id="curlFig" hidden>
@@ -390,7 +390,6 @@ body.fs-open { overflow: hidden; }
           </div>
           <div class="chips" id="bTypes">
             <button class="chip" type="button" data-v="classic" aria-pressed="false">Klasika 1D</button>
-            <button class="chip" type="button" data-v="hybrid" aria-pressed="false">Hybrid</button>
             <button class="chip" type="button" data-v="light" aria-pressed="false">Lagani 2–3D</button>
             <button class="chip" type="button" data-v="medium" aria-pressed="true">Medium 2–5D</button>
             <button class="chip" type="button" data-v="mega" aria-pressed="false">Mega 6D+</button>
@@ -399,6 +398,7 @@ body.fs-open { overflow: hidden; }
             <button class="chip" type="button" data-v="C" aria-pressed="false">C</button>
             <button class="chip" type="button" data-v="CC" aria-pressed="false">CC</button>
             <button class="chip" type="button" data-v="D" aria-pressed="true">D</button>
+            <button class="chip" type="button" data-v="M" aria-pressed="false">M</button>
             <button class="chip" type="button" data-v="L" aria-pressed="false">L</button>
           </div>
           <p class="note">Gore je set sa kartice Set, dole ovaj drugi.</p>
@@ -620,7 +620,7 @@ body.fs-open { overflow: hidden; }
     const c = document.createElement("canvas"); c.width = cv.width; c.height = vw.H; const x = c.getContext("2d");
     x.setTransform(vw.k, 0, 0, vw.k, -vw.x0 * vw.k, -vw.y0 * vw.k);
     // uvijenost: c = koliko je vrh okrenut nagore (C ~60°, D ~70°), k = vidljiva dužina spreda, ang = nagib ka spolja, kink = L: ravna baza pa prelom
-    const curl = { C: { c: 0.25, k: 0.52, ang: 1.25, kink: 0 }, CC: { c: 0.48, k: 0.56, ang: 1.05, kink: 0 }, D: { c: 0.7, k: 0.6, ang: 0.9, kink: 0 }, L: { c: 0.88, k: 0.62, ang: 0.7, kink: 0.45 } }[cfg.curl];   // k: spreda se uvijena trepavica vidi skraćeno (~60% stvarne dužine)
+    const curl = { C: { c: 0.25, k: 0.52, ang: 1.25, kink: 0 }, CC: { c: 0.48, k: 0.56, ang: 1.05, kink: 0 }, D: { c: 0.7, k: 0.6, ang: 0.9, kink: 0 }, M: { c: 0.8, k: 0.61, ang: 0.78, kink: 0.3 }, L: { c: 0.88, k: 0.62, ang: 0.7, kink: 0.45 } }[cfg.curl];   // k: spreda se uvijena trepavica vidi skraćeno (~60% stvarne dužine)
     const curve = (from, dir, Lpx) => {
       const dTip = norm(add(mul(dir, 1 - curl.c), mul(geo.up, curl.c)));
       if (curl.kink) { const knee = add(from, mul(dir, Lpx * curl.kink)); return [add(knee, mul(dir, Lpx * 0.05)), add(knee, mul(dTip, Lpx * (1 - curl.kink)))]; }
@@ -959,7 +959,7 @@ body.fs-open { overflow: hidden; }
 
   // ---------- pogled sa strane: kako uvijenost menja oblik trepavice ----------
   // ugao savijanja (koliko se trepavica ukupno okrene): C ~60°, CC ~65°, D ~70°; L: ravna baza pa oštar prelom
-  const CURL_SHAPE = { C: { deg: 50 }, CC: { deg: 65 }, D: { deg: 80 }, L: { deg: 72, straight: 0.3, bendLen: 0.15 } };   // L: ravna baza, kratak oštar prelom, pa pravo nagore
+  const CURL_SHAPE = { C: { deg: 50 }, CC: { deg: 65 }, D: { deg: 80 }, M: { deg: 66, straight: 0.18, bendLen: 0.42 }, L: { deg: 72, straight: 0.3, bendLen: 0.15 } };   // L: ravna baza, kratak oštar prelom, pa pravo nagore
   function lashPath(type, Lmm) {
     const sh = CURL_SHAPE[type], pts = [];
     let x = 0, y = 0, a = 10 * Math.PI / 180;            // trepavica kreće iz kapka skoro vodoravno, blago nagore
