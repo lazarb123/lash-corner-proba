@@ -177,6 +177,9 @@ body { font-family: var(--f-body); font-weight: 400; letter-spacing: .01em; }
 /* zaglavlje */
 .brandbar { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-block: 6px 18px; border-bottom: 1px solid var(--line); }
 .logo { display: inline-grid; justify-items: center; line-height: 1; color: var(--ink); text-decoration: none; }
+.logo img { display: block; height: clamp(40px, 6vw, 58px); width: auto; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .logo img { filter: invert(1); } }
+:root[data-theme="dark"] .logo img { filter: invert(1); }
 .logo .w1 { font-family: var(--f-display); font-weight: 400; font-size: clamp(34px, 5vw, 48px); letter-spacing: .08em; }
 .logo .w2 { font-family: var(--f-body); font-weight: 400; font-size: clamp(8px, 1vw, 10px); letter-spacing: 1.05em; margin-right: -1.05em; margin-top: 6px; }
 .brandmeta { text-align: right; display: grid; gap: 2px; }
@@ -224,6 +227,9 @@ body { font-family: var(--f-body); font-weight: 400; letter-spacing: .01em; }
 
 /* podnožje */
 .foot { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 6px 16px; padding-top: 14px; border-top: 1px solid var(--line); font-size: 12px; color: var(--muted); letter-spacing: .06em; }
+.foot .seal-logo { height: 22px; width: auto; opacity: .85; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .foot .seal-logo { filter: invert(1); } }
+:root[data-theme="dark"] .foot .seal-logo { filter: invert(1); }
 .foot .seal { font-family: var(--f-display); font-style: italic; color: var(--gold); letter-spacing: 0; font-size: 14px; }
 @media (max-width: 860px) {
   .brandmeta .place { display: none; }
@@ -236,7 +242,7 @@ body { font-family: var(--f-body); font-weight: 400; letter-spacing: .01em; }
 
 <div class="wrap">
   <div class="brandbar">
-    <a class="logo" href="#" aria-label="Lash Corner"><span class="w1">LASH</span><span class="w2">CORNER</span></a>
+    <a class="logo" href="#" aria-label="Lash Corner"><img src="logo.png" alt="Lash Corner" width="475" height="168"></a>
     <div class="brandmeta"><span class="eyebrow">Lash proba</span><span class="place">Beograd · od 2012.</span></div>
   </div>
   <header class="hero">
@@ -389,7 +395,7 @@ body { font-family: var(--f-body); font-weight: 400; letter-spacing: .01em; }
   </div>
 </div>
 
-<div class="wrap"><footer class="foot"><span class="seal">Lash Corner</span><span>Ruski volumen · Eyeliner efekat · Klasika</span><span>Okvirna simulacija za konsultaciju</span></footer></div>
+<div class="wrap"><footer class="foot"><img class="seal-logo" src="logo.png" alt="Lash Corner" width="475" height="168"><span>Ruski volumen · Eyeliner efekat · Klasika</span><span>Okvirna simulacija za konsultaciju</span></footer></div>
 <script src="https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh@0.4.1633559619/face_mesh.js" crossorigin="anonymous"></script>
 <script>
 (() => {
