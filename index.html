@@ -111,7 +111,7 @@ button { font-family: inherit; }
 
 .stage.editing canvas { touch-action: none; cursor: grab; }
 .stage.editing .overlay { position: static; background: transparent; padding: 10px 12px 12px; }
-.stage.editing .overlay .seg, .stage.editing #newPhoto { display: none; }
+.stage.editing .overlay .seg, .stage.editing #newPhoto, .stage.editing #zoomBtn { display: none; }
 .edit-hint { order: -1; font-size: 14px; color: var(--ink); padding: 12px 14px 4px; text-align: center; }
 .stage.fs, body.has-photo .stage.fs {
   position: fixed; inset: 0; z-index: 50; border-radius: 0; margin: 0; background: #0f0c0d; box-shadow: none;
@@ -128,6 +128,21 @@ button { font-family: inherit; }
 body.fs-open { overflow: hidden; }
 .rot-hint { display: none; }
 @media (orientation: portrait) and (max-width: 860px) { .stage.fs .rot-hint { display: block; order: 2; opacity: .8; } }
+
+.hold { white-space: nowrap; }
+.stage { container-type: inline-size; }
+@container (max-width: 820px) { .hold .t { display: none; } .hold.keep .t { display: inline; } .hold { padding: 9px 11px; } }
+@media (min-width: 861px) and (max-width: 1240px) { body.has-photo .intro { display: none; } .grid { grid-template-columns: minmax(0, 1fr) 340px; } }
+.stage.cmp canvas { touch-action: pan-y; cursor: ew-resize; }
+.quick { display: none; }
+.stage.fs:not(.editing) .quick { display: grid; gap: 8px; justify-items: center; padding: 0 12px 12px; order: 3; }
+.quick .qrow { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; }
+.quick button { font: inherit; font-size: 15px; font-weight: 500; line-height: 1; padding: 11px 15px; min-width: 50px; border-radius: 999px; border: 0; background: rgba(255, 255, 255, .14); color: #fff; cursor: pointer; }
+.quick button[aria-pressed="true"] { background: #fff; color: #1d1a1b; }
+.stage.fs .overlay { order: 2; }
+.stage.fs canvas, body.has-photo .stage.fs canvas { max-height: calc(100dvh - 190px); }
+.stage.fs.editing canvas { max-height: calc(100dvh - 130px); }
+@media (min-width: 600px) and (max-width: 860px) { body.has-photo .stage canvas { max-height: 52vh; } }
 
 /* ---------- dugmad ---------- */
 .btn { font: inherit; font-size: 15px; font-weight: 500; cursor: pointer; border-radius: 999px; padding: 13px 20px; border: 1.5px solid var(--accent); background: var(--accent); color: var(--accent-ink); user-select: none; -webkit-user-select: none; display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
@@ -153,7 +168,7 @@ body.fs-open { overflow: hidden; }
 .chips.mini .chip { padding: 5px 0; min-width: 32px; border-radius: 999px; font-size: 13.5px; }
 .group { display: grid; gap: 12px; }
 .row { display: grid; gap: 10px; min-width: 0; }
-.label { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; margin: 0; font-size: 15px; font-weight: 600; color: var(--ink); }
+.label { display: flex; flex-wrap: wrap; row-gap: 8px; align-items: baseline; justify-content: space-between; gap: 10px; margin: 0; font-size: 15px; font-weight: 600; color: var(--ink); }
 .label .now { font-weight: 400; font-size: 14px; color: var(--muted); }
 .linkbtn { font: inherit; font-size: 14px; font-weight: 500; color: var(--ink); background: none; border: 0; padding: 0; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; text-decoration-color: var(--nude-2); }
 .linkbtn:hover { text-decoration-color: var(--ink); }
@@ -172,7 +187,7 @@ body.fs-open { overflow: hidden; }
 .chip[aria-pressed="true"] small { color: inherit; opacity: .72; }
 .chips.tight .chip { justify-content: center; text-align: center; min-width: 52px; }
 #types { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
-#types .chip { justify-content: center; }
+#types .chip { justify-content: center; white-space: nowrap; padding-inline: 6px; }
 .chip small { white-space: nowrap; }
 #curls { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); }
 #curls .chip { justify-content: center; }
@@ -283,16 +298,18 @@ body.fs-open { overflow: hidden; }
       <canvas id="cv" hidden></canvas>
       <div class="overlay" id="overlay" hidden>
         <div class="seg" role="group" aria-label="Prikaz">
-          <button type="button" id="before" aria-pressed="false">Pre</button><button type="button" id="after" aria-pressed="true">Posle</button>
+          <button type="button" id="before" aria-pressed="false">Pre</button><button type="button" id="cmpBtn" aria-pressed="false">Uporedi</button><button type="button" id="after" aria-pressed="true">Posle</button>
         </div>
         <span class="spacer"></span>
-        <button class="hold" id="editBtn" type="button" aria-pressed="false" aria-label="Podesi oči"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M3 13c3-4 6-6 9-6s6 2 9 6"/><circle cx="6" cy="11.3" r="1.6" fill="currentColor"/><circle cx="12" cy="7" r="1.6" fill="currentColor"/><circle cx="18" cy="11.3" r="1.6" fill="currentColor"/></svg><span class="t">Podesi oči</span></button>
+        <button class="hold" id="zoomBtn" type="button" aria-pressed="false" aria-label="Jedno oko izbliza"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6"/><path d="m15 15 5 5M8 10.5h5M10.5 8v5"/></svg><span class="t">Izbliza</span></button>
+        <button class="hold" id="editBtn" type="button" aria-pressed="false" aria-label="Linija kapka"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M3 13c3-4 6-6 9-6s6 2 9 6"/><circle cx="6" cy="11.3" r="1.6" fill="currentColor"/><circle cx="12" cy="7" r="1.6" fill="currentColor"/><circle cx="18" cy="11.3" r="1.6" fill="currentColor"/></svg><span class="t">Linija kapka</span></button>
         <button class="hold" id="fsBtn" type="button" aria-pressed="false" aria-label="Ceo ekran"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg><span class="t">Ceo ekran</span></button>
         <button class="hold" id="newPhoto" type="button" aria-label="Nova slika"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg><span class="t">Nova slika</span></button>
       </div>
       <div class="status" id="status" hidden></div>
       <div class="edit-hint rot-hint" id="rotHint">Okrenite telefon položeno za veći prikaz.</div>
-      <div class="edit-hint" id="editHint" hidden>Prevucite tačke na liniju iz koje rastu trepavice, pa pritisnite Gotovo.</div>
+      <div class="edit-hint" id="editHint" hidden>Olovkom ili prstom povucite liniju iz koje rastu trepavice, od ugla do ugla, za svako oko. Tačkama možete sitno popraviti.</div>
+      <div class="quick" id="quick" aria-label="Brzi izbor"></div>
     </div>
 
     <aside class="panel">
@@ -371,7 +388,8 @@ body.fs-open { overflow: hidden; }
 
       <div class="tabpane" data-pane="prikaz" hidden>
         <div class="row"><p class="label">Kadar</p><div class="chips" id="views">
-          <button class="chip" type="button" data-v="eyes" aria-pressed="true">Oči izbliza</button>
+          <button class="chip" type="button" data-v="eyes" aria-pressed="true">Oba oka</button>
+          <button class="chip" type="button" data-v="eye" aria-pressed="false">Jedno oko</button>
           <button class="chip" type="button" data-v="face" aria-pressed="false">Celo lice</button>
         </div></div>
         <div class="row">
@@ -735,12 +753,19 @@ body.fs-open { overflow: hidden; }
   }
 
   let view = "eyes";
+  const zoomSide = () => { const a = geo.side.R, b = geo.side.L; return len(sub(a.outer, a.inner)) >= len(sub(b.outer, b.inner)) ? "R" : "L"; };
   function setView() {
     if (editing && vw && vw.frozen) { return vw.k; }
-    const face = view === "face";
-    const pts = face ? geo.side.R.face : ["R", "L"].flatMap((s) => [...geo.side[s].lid, ...($("showBrow").checked ? geo.side[s].brow : [])]);
-    const pad = geo.ipd * (face ? 0.35 : (typeof fsOn !== "undefined" && fsOn) ? 0.12 : 0.42);   // u celom ekranu tešnji kadar: veće oči
-    const fsTight = !face && typeof fsOn !== "undefined" && fsOn, padUp = fsTight ? geo.ipd * 0.36 : pad * (face ? 1.2 : 0.8), padDn = fsTight ? geo.ipd * 0.2 : pad * (face ? 0.4 : 0.75);
+    const face = view === "face", one = view === "eye";
+    let pts, pad, padUp, padDn;
+    if (one) {   // jedno oko preko celog kadra: razlika među tehnikama se jasno vidi
+      const g = geo.side[zoomSide()], ew = len(sub(g.outer, g.inner));
+      pts = g.lid; pad = ew * 0.4; padUp = ew * 0.85; padDn = ew * 0.45;
+    } else {
+      pts = face ? geo.side.R.face : ["R", "L"].flatMap((s) => [...geo.side[s].lid, ...($("showBrow").checked ? geo.side[s].brow : [])]);
+      pad = geo.ipd * (face ? 0.35 : (typeof fsOn !== "undefined" && fsOn) ? 0.12 : 0.42);   // u celom ekranu tešnji kadar: veće oči
+      const fsTight = !face && typeof fsOn !== "undefined" && fsOn; padUp = fsTight ? geo.ipd * 0.36 : pad * (face ? 1.2 : 0.8); padDn = fsTight ? geo.ipd * 0.2 : pad * (face ? 0.4 : 0.75);
+    }
     const x0 = Math.max(0, Math.min(...pts.map((p) => p.x)) - pad), y0 = Math.max(0, Math.min(...pts.map((p) => p.y)) - padUp);
     const x1 = Math.min(img.width, Math.max(...pts.map((p) => p.x)) + pad), y1 = Math.min(img.height, Math.max(...pts.map((p) => p.y)) + padDn);
     const k = Math.min(4, 1400 / (x1 - x0)), W = Math.round((x1 - x0) * k), H = Math.round((y1 - y0) * k);
@@ -766,16 +791,38 @@ body.fs-open { overflow: hidden; }
       if (!showBefore && !(editing && dragging)) {
         if (name === "A") { if (!layer || layer.vkey !== vkey()) layer = renderLashes(cfg); }
         else if (!layerB || layerB.vkey !== vkey()) layerB = renderLashes(cfg);
-        ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, r * (vw.H + vw.gapPx)); ctx.drawImage(name === "A" ? layer : layerB, 0, 0); ctx.restore();
-        if ($("showZones").checked) drawZones(k, cfg);
+        ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, r * (vw.H + vw.gapPx));
+        if (cmpMode) { ctx.beginPath(); ctx.rect(splitX * cv.width, 0, cv.width, vw.H); ctx.clip(); }
+        ctx.drawImage(name === "A" ? layer : layerB, 0, 0); ctx.restore();
+        if (cmpMode) { ctx.restore(); return; }
+        if ($("showZones").checked && !(fsOn && !editing)) drawZones(k, cfg);
         if ($("showMeas").checked) drawMeas(k);
         if ($("showBrow").checked) drawBrow(k);
         if ($("showFlick").checked) drawFlick(k);
         if (editing) drawHandles(k);
       }
       ctx.restore();
-      if (rows.length > 1) tagRow(r, name, cfg, name === "A" ? (st.len.L.every((v, i) => v === st.len.R[i]) ? styleName(st.len.L) : "Po meri") : STYLE_NAMES[B.style]);
+      if (rows.length > 1 && !cmpMode) tagRow(r, name, cfg, name === "A" ? (st.len.L.every((v, i) => v === st.len.R[i]) ? styleName(st.len.L) : "Po meri") : STYLE_NAMES[B.style]);
     });
+    if (cmpMode && !showBefore && !editing) drawSplit();
+    if (stroke && stroke.pts.length > 1) { row(0); polyline(stroke.pts, 2.5 * pxScale(k), "#ffd23f"); }
+  }
+  // razdelnik pre | posle
+  function drawSplit() {
+    const X = splitX * cv.width, H = cv.height, s = cv.width / (cv.clientWidth || cv.width);
+    ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.fillStyle = "#fff"; ctx.shadowColor = "rgba(0,0,0,.35)"; ctx.shadowBlur = 6 * s; ctx.fillRect(X - 1.5 * s, 0, 3 * s, H);
+    ctx.beginPath(); ctx.arc(X, H / 2, 20 * s, 0, 7); ctx.fill(); ctx.shadowBlur = 0;
+    ctx.strokeStyle = "#1d1a1b"; ctx.lineWidth = 2.2 * s; ctx.lineCap = "round"; ctx.lineJoin = "round";
+    ctx.beginPath(); ctx.moveTo(X - 5 * s, H / 2 - 6 * s); ctx.lineTo(X - 11 * s, H / 2); ctx.lineTo(X - 5 * s, H / 2 + 6 * s);
+    ctx.moveTo(X + 5 * s, H / 2 - 6 * s); ctx.lineTo(X + 11 * s, H / 2); ctx.lineTo(X + 5 * s, H / 2 + 6 * s); ctx.stroke();
+    ctx.font = `500 ${14 * s}px Jost, system-ui, sans-serif`; ctx.textBaseline = "top";
+    const tag = (t, x, al) => { ctx.textAlign = al; const w = ctx.measureText(t).width + 18 * s, x0 = al === "left" ? x : x - w;
+      ctx.fillStyle = "rgba(29,26,27,.72)"; ctx.beginPath(); ctx.roundRect ? ctx.roundRect(x0, 12 * s, w, 26 * s, 13 * s) : ctx.rect(x0, 12 * s, w, 26 * s); ctx.fill();
+      ctx.fillStyle = "#fff"; ctx.fillText(t, al === "left" ? x0 + 9 * s : x - 9 * s, 17 * s); };
+    if (X > 70 * s) tag("Pre", 12 * s, "left");
+    if (X < cv.width - 80 * s) tag("Posle", cv.width - 12 * s, "right");
+    ctx.restore();
   }
   function styleName(arr) { const m = Object.keys(STYLES).find((k) => STYLES[k].every((v, i) => v === arr[i])); return m ? STYLE_NAMES[m] : "Po meri"; }
   function tagRow(r, name, cfg, style) {
@@ -1015,7 +1062,7 @@ body.fs-open { overflow: hidden; }
   matchMedia("(prefers-color-scheme: dark)").addEventListener?.("change", drawCurl);
   $("showZones").addEventListener("change", draw);
   ["showMeas", "showBrow", "showFlick"].forEach((id) => $(id).addEventListener("change", draw));
-  chipGroup("views", (v) => { view = v; });
+  chipGroup("views", (v) => { view = v; if (vw) vw.frozen = false; });
   let rz; window.addEventListener("resize", () => { clearTimeout(rz); rz = setTimeout(() => { if (vw) vw.frozen = false; layer = null; layerB = null; draw(); if (editing && vw) vw.frozen = true; }, 150); });
   renderZones();
   // sažetak izabranog seta
@@ -1030,8 +1077,32 @@ body.fs-open { overflow: hidden; }
   updRecipe();
 
   const b4 = $("before");
-  const setB = (v) => { showBefore = v; b4.setAttribute("aria-pressed", String(v)); $("after").setAttribute("aria-pressed", String(!v)); draw(); };
-  b4.addEventListener("click", () => setB(true)); $("after").addEventListener("click", () => setB(false));
+  let cmpMode = false, splitX = 0.5, splitDrag = false, stroke = null, penSeen = false;
+  const setMode = (m) => {
+    showBefore = m === "pre"; cmpMode = m === "cmp";
+    b4.setAttribute("aria-pressed", String(m === "pre")); $("after").setAttribute("aria-pressed", String(m === "posle")); $("cmpBtn").setAttribute("aria-pressed", String(cmpMode));
+    stage.classList.toggle("cmp", cmpMode); if (cmpMode) splitX = 0.5; draw();
+  };
+  const setB = (v) => setMode(v ? "pre" : "posle");
+  b4.addEventListener("click", () => setMode("pre")); $("after").addEventListener("click", () => setMode("posle")); $("cmpBtn").addEventListener("click", () => setMode("cmp"));
+  // izbliza: jedno oko preko celog kadra
+  const syncZoom = () => { const z = view === "eye"; $("zoomBtn").setAttribute("aria-pressed", String(z)); $("zoomBtn").querySelector(".t").textContent = z ? "Oba oka" : "Izbliza"; $("zoomBtn").setAttribute("aria-label", z ? "Oba oka" : "Jedno oko izbliza"); };
+  $("zoomBtn").onclick = () => { view = view === "eye" ? "eyes" : "eye"; $("views").querySelectorAll(".chip").forEach((c) => c.setAttribute("aria-pressed", String(c.dataset.v === view))); syncZoom(); redraw(); };
+  $("views").addEventListener("click", () => setTimeout(syncZoom, 0));
+  // brzi izbor u celom ekranu: tehnika i uvijenost, da klijentkinja gleda dok se menja
+  (function buildQuick() {
+    const q = $("quick");
+    for (const id of ["types", "curls"]) {
+      const rowEl = document.createElement("div"); rowEl.className = "qrow";
+      $(id).querySelectorAll(".chip").forEach((c) => {
+        const b = document.createElement("button"); b.type = "button"; b.textContent = c.textContent.replace("Klasika ", ""); b.dataset.v = c.dataset.v;
+        b.setAttribute("aria-pressed", c.getAttribute("aria-pressed")); b.onclick = () => c.click();
+        new MutationObserver(() => b.setAttribute("aria-pressed", c.getAttribute("aria-pressed"))).observe(c, { attributes: true, attributeFilter: ["aria-pressed"] });
+        rowEl.appendChild(b);
+      });
+      q.appendChild(rowEl);
+    }
+  })();
 
   // ---------- učitavanje ----------
   function initMesh() {
@@ -1156,8 +1227,9 @@ body.fs-open { overflow: hidden; }
   const toImg = (e) => { const r = cv.getBoundingClientRect(), cx = (e.clientX - r.left) * cv.width / r.width, cy = (e.clientY - r.top) * cv.height / r.height; return { x: cx / vw.k + vw.x0, y: cy / vw.k + vw.y0 }; };
   function setEditing(on) {
     if (!geo) return;
-    editing = on; dragging = null;
-    $("editBtn").setAttribute("aria-pressed", String(on)); $("editBtn").querySelector(".t").textContent = on ? "Gotovo" : "Podesi oči"; $("editBtn").setAttribute("aria-label", on ? "Gotovo" : "Podesi oči"); $("editBtn").classList.toggle("keep", on);
+    if (on && (cmpMode || showBefore)) setMode("posle");
+    editing = on; dragging = null; stroke = null;
+    $("editBtn").setAttribute("aria-pressed", String(on)); $("editBtn").querySelector(".t").textContent = on ? "Gotovo" : "Linija kapka"; $("editBtn").setAttribute("aria-label", on ? "Gotovo" : "Linija kapka"); $("editBtn").classList.toggle("keep", on);
     stage.classList.toggle("editing", on); $("editHint").hidden = !on;
     if (on) { setView(); vw.frozen = true; } else if (vw) vw.frozen = false;
     layer = null; layerB = null; draw();
@@ -1177,25 +1249,64 @@ body.fs-open { overflow: hidden; }
     if (!editing) { if (!fsOn) { fsAuto = true; setFs(true); } setEditing(true); }
     else { setEditing(false); if (fsAuto) { fsAuto = false; setFs(false); } }
   };
+  // linija nacrtana olovkom postaje linija kapka za oko kome je najbliža
+  function lidFromStroke(raw) {
+    if (raw.length < 6) return null;
+    const sm = raw.map((p, i, a) => { let x = 0, y = 0, n = 0; for (let j = Math.max(0, i - 3); j <= Math.min(a.length - 1, i + 3); j++) { x += a[j].x; y += a[j].y; n++; } return { x: x / n, y: y / n }; });
+    const mid = (arr) => arr.reduce((m, p) => add(m, mul(p, 1 / arr.length)), { x: 0, y: 0 });
+    const c = mid(sm); let side = "R", bd = Infinity;
+    for (const s of ["R", "L"]) { const d = len(sub(mid(geo.side[s].lid), c)); if (d < bd) { bd = d; side = s; } }
+    const g = geo.side[side], a0 = sm[0], a1 = sm[sm.length - 1];
+    const line = len(sub(a0, g.inner)) + len(sub(a1, g.outer)) <= len(sub(a1, g.inner)) + len(sub(a0, g.outer)) ? sm : sm.slice().reverse();
+    let L = 0; for (let i = 1; i < line.length; i++) L += len(sub(line[i], line[i - 1]));
+    if (L < g.mmPx * 10) return null;
+    const lid = resample(line, 84);
+    g.lidAuto = lid; g.lid = lid.slice(); g.adj = [{ x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 0 }];
+    g.inner = lid[0]; g.outer = lid[lid.length - 1]; g.outward = norm(sub(g.outer, g.inner));
+    return side;
+  }
+  const setSplit = (e) => { const r = cv.getBoundingClientRect(); splitX = Math.min(0.98, Math.max(0.02, (e.clientX - r.left) / r.width)); };
   cv.addEventListener("pointerdown", (e) => {
-    if (!editing || !geo) return;
+    if (!geo) return;
+    if (!editing) {
+      if (cmpMode && !showBefore) { splitDrag = true; cv.setPointerCapture(e.pointerId); setSplit(e); draw(); }
+      return;
+    }
+    if (e.pointerType === "pen") penSeen = true;
+    if (penSeen && e.pointerType === "touch") return;   // dlan na ekranu dok se crta olovkom
     const p = toImg(e), tol = 28 * (cv.width / cv.getBoundingClientRect().width) / vw.k;
     let best = null, bd = tol;
     for (const q of handlePts()) { const d = len(sub(q.p, p)); if (d < bd) { bd = d; best = q; } }
-    if (!best) return;
     e.preventDefault(); cv.setPointerCapture(e.pointerId);
+    if (!best) { stroke = { id: e.pointerId, pts: [p] }; return; }
     const g = geo.side[best.s];
     dragging = { s: best.s, h: best.h, start: p, adj0: { ...g.adj[best.h] } };
   });
   let raf = 0;
   cv.addEventListener("pointermove", (e) => {
+    if (splitDrag) { setSplit(e); if (!raf) raf = requestAnimationFrame(() => { raf = 0; draw(); }); return; }
+    if (stroke && e.pointerId === stroke.id) {
+      e.preventDefault();
+      for (const ev of (e.getCoalescedEvents ? e.getCoalescedEvents() : [e])) stroke.pts.push(toImg(ev.clientX === undefined ? e : ev));
+      if (!raf) raf = requestAnimationFrame(() => { raf = 0; draw(); });
+      return;
+    }
     if (!dragging) return; e.preventDefault();
     const p = toImg(e), g = geo.side[dragging.s];
     g.adj[dragging.h] = { x: dragging.adj0.x + p.x - dragging.start.x, y: dragging.adj0.y + p.y - dragging.start.y };
     applyAdj(g);
     if (!raf) raf = requestAnimationFrame(() => { raf = 0; draw(); });
   });
-  const endDrag = () => { if (!dragging) return; dragging = null; layer = null; layerB = null; draw(); };
+  const endDrag = (e) => {
+    if (splitDrag) { splitDrag = false; return; }
+    if (stroke && (!e || e.pointerId === stroke.id)) {
+      const pts = stroke.pts; stroke = null;
+      const ok = e && e.type === "pointerup" && lidFromStroke(pts);
+      if (!ok && e && e.type === "pointerup") hint("Povucite liniju celom dužinom oka, od unutrašnjeg do spoljnog ugla.");
+      layer = null; layerB = null; draw(); return;
+    }
+    if (!dragging) return; dragging = null; layer = null; layerB = null; draw();
+  };
   cv.addEventListener("pointerup", endDrag); cv.addEventListener("pointercancel", endDrag);
   // kartice
   document.querySelectorAll(".tab").forEach((t) => t.addEventListener("click", () => {
@@ -1227,6 +1338,7 @@ body.fs-open { overflow: hidden; }
   window.__loadUrl = (u) => fetch(u).then((r) => r.blob()).then((b) => loadFile(new File([b], "t.png", { type: "image/png" })));
   window.__eyes = () => geo && vw && ["R", "L"].map((s) => { const p = geo.side[s].lid, xs = p.map((q) => (q.x - vw.x0) * vw.k), ys = p.map((q) => (q.y - vw.y0) * vw.k); return [Math.min(...xs), Math.min(...ys), Math.max(...xs), Math.max(...ys)]; });
   window.__state = () => ({ ok: !!geo, status: statusEl.textContent });
+  window.__lidScreen = (sd, dy) => { const r = cv.getBoundingClientRect(); return geo.side[sd].lid.map((p) => ({ x: r.left + (p.x - vw.x0) * vw.k * r.width / cv.width, y: r.top + (p.y + dy - vw.y0) * vw.k * r.height / cv.height })); };
 })();
 </script>
 
