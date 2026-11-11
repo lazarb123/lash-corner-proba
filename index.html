@@ -4,281 +4,294 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow">
-<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
-</head>
-<body>
-<title>Lash Corner · Lash proba</title>
-<meta name="claude:viewport-fit-sides" content="cover">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;1,6..96,400&family=Jost:wght@300;400;500;600&family=IBM+Plex+Mono:wght@500&display=swap">
+<meta name="theme-color" content="#fbf8f6">
+<title>Lash Corner · Proba seta</title>
+<link rel="icon" href="logo.png">
+<link rel="preload" href="fonts/jost-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/jost-latin-500-normal.woff2" as="font" type="font/woff2" crossorigin>
 <style>
-/* Layout: fotografija levo kao radna površina, panel sa podešavanjima desno; na telefonu panel ide ispod */
+@font-face { font-family: "Jost"; font-weight: 300; font-display: swap; src: url(fonts/jost-latin-300-normal.woff2) format("woff2"); unicode-range: U+0000-00FF, U+2000-206F, U+2190-21FF, U+2212; }
+@font-face { font-family: "Jost"; font-weight: 400; font-display: swap; src: url(fonts/jost-latin-400-normal.woff2) format("woff2"); unicode-range: U+0000-00FF, U+2000-206F, U+2190-21FF, U+2212; }
+@font-face { font-family: "Jost"; font-weight: 500; font-display: swap; src: url(fonts/jost-latin-500-normal.woff2) format("woff2"); unicode-range: U+0000-00FF, U+2000-206F, U+2190-21FF, U+2212; }
+@font-face { font-family: "Jost"; font-weight: 600; font-display: swap; src: url(fonts/jost-latin-600-normal.woff2) format("woff2"); unicode-range: U+0000-00FF, U+2000-206F, U+2190-21FF, U+2212; }
+@font-face { font-family: "Jost"; font-weight: 300; font-display: swap; src: url(fonts/jost-latin-ext-300-normal.woff2) format("woff2"); unicode-range: U+0100-024F, U+1E00-1EFF; }
+@font-face { font-family: "Jost"; font-weight: 400; font-display: swap; src: url(fonts/jost-latin-ext-400-normal.woff2) format("woff2"); unicode-range: U+0100-024F, U+1E00-1EFF; }
+@font-face { font-family: "Jost"; font-weight: 500; font-display: swap; src: url(fonts/jost-latin-ext-500-normal.woff2) format("woff2"); unicode-range: U+0100-024F, U+1E00-1EFF; }
+@font-face { font-family: "Jost"; font-weight: 600; font-display: swap; src: url(fonts/jost-latin-ext-600-normal.woff2) format("woff2"); unicode-range: U+0100-024F, U+1E00-1EFF; }
+
+/* Lash Corner — proba seta.
+   Boje: porcelan (pozadina), crna kao trepavica (izbor, akcije), nude (neizabrano, podloge), moka (sporedni tekst).
+   Jedan font (Jost, geometrijski kao logotip). Jedini "glasni" element: mapa dužina kao crne trepavice. */
 :root {
-  --bg: #f6f2f1;
+  --bg: #fbf8f6;
   --surface: #ffffff;
-  --ink: #2a2124;
-  --muted: #76696d;
-  --line: #e4dadb;
-  --accent: #7a2e4f;
+  --ink: #1d1a1b;
+  --ink-2: #4a3f3b;
+  --muted: #6f605a;
+  --line: #e8ded8;
+  --nude: #f3ebe6;
+  --nude-2: #e9dcd4;
+  --stage: #efe6e0;
+  --accent: #1d1a1b;
   --accent-ink: #ffffff;
-  --chip: #f1e8e9;
-  --stage: #ebe4e3;
-  --f-display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
-  --f-body: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
-  --f-mono: "IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
+  --chip: #f3ebe6;
+  --focus: #b5546a;
+  --r-s: 8px; --r-m: 14px; --r-l: 22px;
+  --f-body: "Jost", "Futura", "Century Gothic", system-ui, sans-serif;
+  --f-display: var(--f-body);
+  --f-mono: var(--f-body);
 }
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --bg: #191517; --surface: #231d20; --ink: #f1e9eb; --muted: #a8999e;
-    --line: #3a3034; --accent: #e58bb0; --accent-ink: #2a1019; --chip: #2e2629; --stage: #110e10;
-    color-scheme: dark;
-  }
-}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #141112; --surface: #1d191a; --ink: #f5eee9; --ink-2: #d9ccc5; --muted: #a8988f; --line: #332c2b;
+  --nude: #272122; --nude-2: #382f2e; --stage: #0d0b0b; --accent: #f5eee9; --accent-ink: #1d1a1b; --chip: #272122; --focus: #e48ea2;
+  color-scheme: dark; } }
 :root[data-theme="dark"] {
-  --bg: #191517; --surface: #231d20; --ink: #f1e9eb; --muted: #a8999e;
-  --line: #3a3034; --accent: #e58bb0; --accent-ink: #2a1019; --chip: #2e2629; --stage: #110e10;
-  color-scheme: dark;
-}
+  --bg: #141112; --surface: #1d191a; --ink: #f5eee9; --ink-2: #d9ccc5; --muted: #a8988f; --line: #332c2b;
+  --nude: #272122; --nude-2: #382f2e; --stage: #0d0b0b; --accent: #f5eee9; --accent-ink: #1d1a1b; --chip: #272122; --focus: #e48ea2;
+  color-scheme: dark; }
+
 * { box-sizing: border-box; }
 [hidden] { display: none !important; }
+html { -webkit-text-size-adjust: 100%; }
 body {
-  background: var(--bg); color: var(--ink);
-  font-family: var(--f-body); font-size: 15px; line-height: 1.5;
-  padding-left: max(16px, env(safe-area-inset-left, 0px));
-  padding-right: max(16px, env(safe-area-inset-right, 0px));
-  padding-block: 20px 40px;
+  margin: 0; background: var(--bg); color: var(--ink);
+  font-family: var(--f-body); font-size: 15.5px; line-height: 1.5; font-weight: 400;
+  padding: max(20px, env(safe-area-inset-top, 0px)) max(16px, env(safe-area-inset-right, 0px)) max(40px, env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px));
+  -webkit-font-smoothing: antialiased;
 }
-.wrap { max-width: 1180px; margin: 0 auto; display: grid; gap: 18px; }
-header { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px 20px; }
-h1 { font-family: var(--f-display); font-weight: 700; font-size: clamp(26px, 4vw, 36px); line-height: 1.1; margin: 0; letter-spacing: -0.01em; }
-.sub { color: var(--muted); margin: 0; max-width: 56ch; }
-.grid { display: grid; grid-template-columns: minmax(0, 1fr) 330px; gap: 18px; align-items: start; }
-@media (max-width: 860px) { .grid { grid-template-columns: minmax(0, 1fr); } }
+img { max-width: 100%; }
+button { font-family: inherit; }
+:where(button, input, a):focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.wrap { max-width: 1200px; margin: 0 auto; display: grid; gap: 22px; }
 
-.stage { background: var(--stage); border-radius: 14px; min-height: 380px; display: grid; place-items: center; position: relative; overflow: hidden; outline: 2px dashed transparent; outline-offset: -8px; }
-.stage.loaded { min-height: 0; }
-.stage.drag { outline-color: var(--accent); }
-.stage canvas { display: block; max-width: 100%; height: auto; max-height: 78vh; }
-.empty { display: grid; gap: 14px; justify-items: center; text-align: center; padding: 28px 16px; max-width: 440px; }
-.empty svg { width: min(260px, 100%); height: auto; }
-.empty p { margin: 0; color: var(--muted); }
-.status { position: absolute; left: 12px; bottom: 12px; right: 12px; width: fit-content; font-size: 13px; color: #fff; background: rgba(20, 14, 16, .78); padding: 7px 11px; border-radius: 8px; }
+/* ---------- zaglavlje ---------- */
+.top { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.logo { display: block; line-height: 0; }
+.logo img { height: clamp(38px, 5vw, 50px); width: auto; display: block; }
+.top .tool { font-size: 14px; color: var(--muted); }
+.intro { display: grid; gap: 8px; padding-block: 10px 4px; }
+.intro h1 { font-weight: 400; font-size: clamp(30px, 4.6vw, 52px); line-height: 1.04; letter-spacing: -0.02em; margin: 0; max-width: 18ch; text-wrap: balance; }
+.intro p { margin: 0; color: var(--muted); font-size: 16.5px; max-width: 54ch; font-weight: 300; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .logo img, :root:not([data-theme="light"]) .foot img { filter: invert(1); } }
+:root[data-theme="dark"] .logo img, :root[data-theme="dark"] .foot img { filter: invert(1); }
 
-.panel { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 16px; display: grid; gap: 20px; }
-.group { display: grid; gap: 10px; }
-.label { font-size: 11px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin: 0; }
-.btn { font: inherit; font-weight: 600; cursor: pointer; border-radius: 10px; padding: 11px 14px; border: 1px solid var(--accent); background: var(--accent); color: var(--accent-ink); user-select: none; -webkit-user-select: none; }
-.btn.ghost { background: transparent; color: var(--accent); }
-.btn:focus-visible, .chip:focus-visible, .step button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+/* ---------- raspored ---------- */
+.grid { display: grid; grid-template-columns: minmax(0, 1fr) 380px; gap: 20px; align-items: start; }
 
-.chips { display: flex; flex-wrap: wrap; gap: 6px; }
-.chip { font: inherit; font-size: 14px; cursor: pointer; padding: 7px 12px; border-radius: 999px; border: 1px solid var(--line); background: var(--chip); color: var(--ink); }
-.chip[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); font-weight: 600; }
-
-.zrow { display: grid; gap: 4px; }
-.zrow + .zrow { margin-top: 8px; }
-.zrow .zname { font-size: 12.5px; color: var(--muted); }
-.zones { display: grid; grid-template-columns: repeat(var(--nz, 8), minmax(0, 1fr)); gap: 4px; }
-.zones.dense .step output { font-size: 15px; }
-.zones.dense .step small { font-size: 9px; }
-.step { display: grid; justify-items: center; gap: 2px; background: var(--chip); border-radius: 10px; padding: 6px 2px; }
-.step button { font: inherit; font-size: 18px; line-height: 1; width: 100%; padding: 4px 0; border: 0; background: transparent; color: var(--accent); cursor: pointer; border-radius: 6px; }
-.step output { font-family: var(--f-mono); font-variant-numeric: tabular-nums; font-size: 17px; font-weight: 500; }
-.step small { font-size: 10px; color: var(--muted); }
-.zone-ends { display: flex; justify-content: space-between; font-size: 12px; color: var(--muted); }
-.meas { display: grid; grid-template-columns: 1fr auto auto; gap: 3px 14px; font-size: 13.5px; }
-.meas .h { color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: .06em; }
-.meas .v { font-family: var(--f-mono); font-variant-numeric: tabular-nums; text-align: right; }
-.meas .full { grid-column: 2 / 4; text-align: center; }
-.tags { display: flex; flex-wrap: wrap; gap: 6px; }
-.tag { font-size: 12.5px; padding: 3px 9px; border-radius: 6px; background: var(--chip); }
-.suggest { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 10px 12px; border: 1px solid var(--line); border-radius: 10px; font-size: 14px; }
-.suggest .btn { padding: 7px 12px; font-size: 13.5px; }
-.pickrow { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-.hold {
-  position: absolute; right: 10px; bottom: 10px; font: inherit; font-weight: 600; font-size: 14px;
-  padding: 10px 14px; border-radius: 999px; border: 0; color: #fff; background: rgba(20, 14, 16, .72); cursor: pointer;
-  user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; touch-action: none;
-}
-.hold:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
-.stage canvas { -webkit-touch-callout: none; user-select: none; -webkit-user-select: none; }
-@media (max-width: 860px) {
-  body { padding-block: 12px 32px; font-size: 16px; }
-  .wrap { gap: 12px; }
-  .sub { font-size: 14px; }
-  .desk { display: none; }
-  body.has-photo header { display: none; }
-  body.has-photo .stage { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; box-shadow: 0 6px 16px rgba(0,0,0,.18); }
-  body.has-photo .stage canvas { max-height: 38vh; }
-  .row .chips { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; margin-inline: -14px; padding-inline: 14px; -webkit-overflow-scrolling: touch; }
-  .row .chips::-webkit-scrollbar { display: none; }
-  .row .chip { flex: none; }
-
-  .stage { min-height: 240px; border-radius: 12px; scroll-margin-top: 8px; }
-  .stage canvas { max-height: 60vh; }
-  .panel { padding: 14px; gap: 18px; }
-  .chip { padding: 9px 13px; }
-  .step button { padding: 8px 0; font-size: 20px; }
-  .btn { padding: 13px 14px; }
-}
-.tips { display: grid; gap: 6px; }
-.tips p { margin: 0; font-size: 13.5px; padding: 8px 10px; border-radius: 8px; background: var(--chip); }
-.tips p strong { font-weight: 600; }
-.tips p button { margin-left: 6px; font: inherit; font-size: 12.5px; font-weight: 600; color: var(--accent); background: none; border: 1px solid var(--accent); border-radius: 6px; padding: 2px 8px; cursor: pointer; }
-.profile { margin: 0; display: grid; gap: 4px; }
-.profile canvas { width: 100%; height: auto; border-radius: 10px; background: var(--chip); }
-.profile figcaption { font-size: 12.5px; color: var(--muted); }
-.tabs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; padding: 4px; background: var(--chip); border-radius: 12px; }
-.tab { font: inherit; font-weight: 600; font-size: 14px; padding: 8px 6px; border: 0; border-radius: 9px; background: transparent; color: var(--muted); cursor: pointer; }
-.tab[aria-selected="true"] { background: var(--surface); color: var(--ink); box-shadow: 0 1px 3px rgba(0,0,0,.12); }
-.tab:focus-visible, .linkbtn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-.tabpane { display: grid; gap: 16px; }
-.row { display: grid; gap: 8px; min-width: 0; }
-.linkbtn { font: inherit; font-size: 11px; letter-spacing: .04em; text-transform: none; color: var(--accent); background: none; border: 0; padding: 0 0 0 6px; cursor: pointer; text-decoration: underline; }
-.stage.loaded { display: flex; flex-direction: column; align-items: stretch; }
+/* ---------- fotografija ---------- */
+.stage { background: var(--stage); border-radius: var(--r-l); min-height: 460px; display: grid; place-items: center; position: relative; overflow: hidden; outline: 2px dashed transparent; outline-offset: -10px; }
+.stage.drag { outline-color: var(--ink); }
+.stage canvas { display: block; max-width: 100%; height: auto; max-height: 78vh; -webkit-touch-callout: none; user-select: none; -webkit-user-select: none; }
+.stage.loaded { min-height: 0; display: flex; flex-direction: column; align-items: stretch; }
 .stage.loaded canvas { align-self: center; }
-.overlay { display: flex; justify-content: flex-end; flex-wrap: wrap; gap: 6px; padding: 8px; }
-.overlay .hold { position: static; font-size: 13px; padding: 7px 12px; }
-.overlay .hold[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); }
+.empty { display: grid; gap: 18px; justify-items: center; text-align: center; padding: 40px 20px; max-width: 460px; }
+.empty > svg { width: min(230px, 80%); height: auto; color: var(--ink); }
+.empty h2 { margin: 0; font-weight: 400; font-size: 24px; letter-spacing: -0.01em; }
+.empty p { margin: 0; color: var(--muted); font-size: 14.5px; max-width: 40ch; }
+.status { position: absolute; left: 12px; top: 12px; right: 12px; width: fit-content; font-size: 13.5px; color: #fff; background: rgba(29, 26, 27, .82); padding: 8px 12px; border-radius: var(--r-s); z-index: 2; }
+
+/* alati preko fotografije */
+.overlay { position: absolute; left: 0; right: 0; bottom: 0; display: flex; align-items: center; gap: 8px; padding: 28px 12px 12px; background: linear-gradient(to top, rgba(18, 14, 15, .55), rgba(18, 14, 15, 0)); pointer-events: none; }
+.overlay > * { pointer-events: auto; }
+.overlay .spacer { flex: 1; }
+.hold {
+  display: inline-flex; align-items: center; gap: 7px; font: inherit; font-size: 14px; font-weight: 500; line-height: 1;
+  padding: 10px 14px; border-radius: 999px; border: 0; color: var(--ink); background: rgba(255, 255, 255, .92); cursor: pointer;
+  -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
+  user-select: none; -webkit-user-select: none; -webkit-touch-callout: none;
+}
+.hold svg { width: 17px; height: 17px; flex: none; }
+.hold:hover { background: #fff; }
+.hold[aria-pressed="true"] { background: var(--ink); color: #fff; }
+:root[data-theme="dark"] .hold[aria-pressed="true"] { background: #fff; color: #1d1a1b; }
+/* pre / posle */
+.seg { display: inline-flex; padding: 3px; border-radius: 999px; background: rgba(255, 255, 255, .92); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); }
+.seg button { font: inherit; font-size: 14px; font-weight: 500; line-height: 1; border: 0; background: transparent; color: #4a3f3b; padding: 8px 15px; border-radius: 999px; cursor: pointer; }
+.seg button[aria-pressed="true"] { background: #1d1a1b; color: #fff; }
+
 .stage.editing canvas { touch-action: none; cursor: grab; }
+.stage.editing .overlay { position: static; background: transparent; padding: 10px 12px 12px; }
+.stage.editing .overlay .seg, .stage.editing #newPhoto { display: none; }
+.edit-hint { order: -1; font-size: 14px; color: var(--ink); padding: 12px 14px 4px; text-align: center; }
 .stage.fs, body.has-photo .stage.fs {
-  position: fixed; inset: 0; z-index: 50; border-radius: 0; margin: 0; background: #111014; box-shadow: none;
+  position: fixed; inset: 0; z-index: 50; border-radius: 0; margin: 0; background: #0f0c0d; box-shadow: none;
   display: flex; flex-direction: column; justify-content: center;
   padding: env(safe-area-inset-top, 0px) env(safe-area-inset-right, 0px) env(safe-area-inset-bottom, 0px) env(safe-area-inset-left, 0px);
 }
-.stage.fs canvas, body.has-photo .stage.fs canvas { width: auto; max-width: 100%; max-height: calc(100dvh - 110px); align-self: center; }
-.stage.fs .edit-hint { color: #fff; text-align: center; }
-.stage.fs .overlay { justify-content: center; }
+.stage.fs canvas, body.has-photo .stage.fs canvas { width: auto; max-width: 100%; max-height: calc(100dvh - 90px); align-self: center; }
+.stage.fs .edit-hint { color: #fff; }
+.stage.fs .overlay { position: static; justify-content: center; background: transparent; padding: 12px; }
+.stage.fs .overlay .spacer { display: none; }
+.stage.fs #newPhoto { display: none; }
+.stage.fs .hold { background: rgba(255, 255, 255, .14); color: #fff; }
+.stage.fs .hold[aria-pressed="true"] { background: #fff; color: #1d1a1b; }
 body.fs-open { overflow: hidden; }
 .rot-hint { display: none; }
 @media (orientation: portrait) and (max-width: 860px) { .stage.fs .rot-hint { display: block; order: 2; opacity: .8; } }
-.stage.fs #newPhoto { display: none; }
-.edit-hint { order: -1; font-size: 13px; color: var(--ink); padding: 8px 10px 0; }
-.note { font-size: 12.5px; color: var(--muted); margin: 0; }
-.check { display: flex; align-items: center; gap: 8px; font-size: 14px; cursor: pointer; }
-.check input { accent-color: var(--accent); width: 16px; height: 16px; }
 
-/* ===== LASH CORNER — brend: crna, krem/nude, zlato; Bodoni logotip + Jost ===== */
-:root {
-  --bg: #f6f0eb; --surface: #fffdfb; --ink: #151213; --muted: #85776f; --line: #e6dbd2;
-  --accent: #151213; --accent-ink: #f6f0eb; --chip: #f3ebe4; --stage: #e9e0d8;
-  --gold: #b08d57; --gold-soft: #d8c19a; --wine: #7d1c24;
-  --f-display: "Bodoni Moda", "Didot", "Times New Roman", serif;
-  --f-body: "Jost", "Futura", "Segoe UI", system-ui, sans-serif;
+/* ---------- dugmad ---------- */
+.btn { font: inherit; font-size: 15px; font-weight: 500; cursor: pointer; border-radius: 999px; padding: 13px 20px; border: 1.5px solid var(--accent); background: var(--accent); color: var(--accent-ink); user-select: none; -webkit-user-select: none; display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
+.btn svg { width: 18px; height: 18px; }
+.btn.ghost { background: transparent; color: var(--ink); border-color: var(--ink); }
+.btn:hover { filter: brightness(1.15); }
+.pickrow { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: 100%; }
+
+/* ---------- panel ---------- */
+.panel { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-l); padding: 8px 20px 22px; display: grid; grid-template-columns: minmax(0, 1fr); gap: 20px; }
+.recipe { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 16px; padding: 16px 0 4px; margin: 0; }
+.recipe div { display: grid; gap: 1px; min-width: 0; }
+.recipe dt { font-size: 13px; color: var(--muted); }
+.recipe dd { margin: 0; font-size: 17px; font-weight: 500; line-height: 1.25; }
+
+.tabs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3px; padding: 3px; background: var(--nude); border-radius: 999px; }
+.tab { font: inherit; font-size: 14.5px; font-weight: 500; padding: 9px 6px; border: 0; border-radius: 999px; background: transparent; color: var(--muted); cursor: pointer; }
+.tab[aria-selected="true"] { background: var(--surface); color: var(--ink); box-shadow: 0 1px 2px rgba(60, 40, 35, .14), 0 0 0 1px var(--line); }
+.tabpane { display: grid; grid-template-columns: minmax(0, 1fr); gap: 24px; }
+@media (min-width: 861px) { body.has-photo .stage { position: sticky; top: 20px; } }
+.chips.mini { flex: none; flex-wrap: nowrap; gap: 4px; align-items: center; font-weight: 400; font-size: 13.5px; color: var(--muted); }
+.chips.mini span { margin-right: 4px; }
+.chips.mini .chip { padding: 5px 0; min-width: 32px; border-radius: 999px; font-size: 13.5px; }
+.group { display: grid; gap: 12px; }
+.row { display: grid; gap: 10px; min-width: 0; }
+.label { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; margin: 0; font-size: 15px; font-weight: 600; color: var(--ink); }
+.label .now { font-weight: 400; font-size: 14px; color: var(--muted); }
+.linkbtn { font: inherit; font-size: 14px; font-weight: 500; color: var(--ink); background: none; border: 0; padding: 0; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; text-decoration-color: var(--nude-2); }
+.linkbtn:hover { text-decoration-color: var(--ink); }
+
+/* izbori */
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chips.cols { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.chip {
+  font: inherit; font-size: 14.5px; font-weight: 500; line-height: 1.2; cursor: pointer; text-align: left;
+  padding: 10px 14px; border-radius: var(--r-m); border: 1.5px solid transparent; background: var(--nude); color: var(--ink);
+  display: flex; align-items: baseline; justify-content: space-between; gap: 8px;
 }
-@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
-  --bg: #0f0d0e; --surface: #181516; --ink: #f4ece5; --muted: #a39389; --line: #2e2826;
-  --accent: #f4ece5; --accent-ink: #151213; --chip: #221d1d; --stage: #0a0909; --gold: #c9a66b; --gold-soft: #6e5a3b; --wine: #b8434d; color-scheme: dark; } }
-:root[data-theme="dark"] {
-  --bg: #0f0d0e; --surface: #181516; --ink: #f4ece5; --muted: #a39389; --line: #2e2826;
-  --accent: #f4ece5; --accent-ink: #151213; --chip: #221d1d; --stage: #0a0909; --gold: #c9a66b; --gold-soft: #6e5a3b; --wine: #b8434d; color-scheme: dark; }
-body { font-family: var(--f-body); font-weight: 400; letter-spacing: .01em; }
+.chip small { font-size: 13px; font-weight: 400; color: var(--muted); }
+.chip:hover { border-color: var(--nude-2); }
+.chip[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+.chip[aria-pressed="true"] small { color: inherit; opacity: .72; }
+.chips.tight .chip { justify-content: center; text-align: center; min-width: 52px; }
+#types { grid-template-columns: minmax(0, 1fr); }
+.chip small { white-space: nowrap; }
+#curls { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); }
+#curls .chip { justify-content: center; }
 
-/* zaglavlje */
-.brandbar { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-block: 6px 18px; border-bottom: 1px solid var(--line); }
-.logo { display: inline-grid; justify-items: center; line-height: 1; color: var(--ink); text-decoration: none; }
-.logo img { display: block; height: clamp(40px, 6vw, 58px); width: auto; }
-@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .logo img { filter: invert(1); } }
-:root[data-theme="dark"] .logo img { filter: invert(1); }
-.logo .w1 { font-family: var(--f-display); font-weight: 400; font-size: clamp(34px, 5vw, 48px); letter-spacing: .08em; }
-.logo .w2 { font-family: var(--f-body); font-weight: 400; font-size: clamp(8px, 1vw, 10px); letter-spacing: 1.05em; margin-right: -1.05em; margin-top: 6px; }
-.brandmeta { text-align: right; display: grid; gap: 2px; }
-.brandmeta .eyebrow { font-size: 10.5px; letter-spacing: .32em; text-transform: uppercase; color: var(--gold); }
-.brandmeta .place { font-size: 12px; color: var(--muted); letter-spacing: .08em; }
-.hero { display: grid; gap: 6px; padding-top: 6px; }
-.hero h1 { font-family: var(--f-display); font-weight: 400; font-size: clamp(28px, 4.4vw, 46px); line-height: 1.05; letter-spacing: -.005em; margin: 0; text-wrap: balance; }
-.hero h1 em { font-style: italic; color: var(--gold); }
-.hero .sub { font-weight: 300; font-size: 15.5px; color: var(--muted); max-width: 52ch; }
-.hairline { display: flex; align-items: center; gap: 10px; color: var(--gold); font-size: 10px; letter-spacing: .3em; text-transform: uppercase; }
-.hairline::before, .hairline::after { content: ""; height: 1px; flex: 1; background: linear-gradient(90deg, transparent, var(--gold-soft), transparent); }
+/* mapa dužina: svaka zona je crna "trepavica" */
+.zrow { display: grid; gap: 6px; }
+.zrow + .zrow { margin-top: 10px; }
+.zrow .zname { font-size: 13.5px; color: var(--muted); }
+.zones { display: grid; grid-template-columns: repeat(var(--nz, 8), minmax(0, 1fr)); gap: 4px; align-items: end; padding: 10px 6px 4px; background: var(--nude); border-radius: var(--r-m); }
+.step { display: grid; justify-items: center; gap: 2px; }
+.step button { font: inherit; font-size: 20px; font-weight: 400; line-height: 1; width: 100%; max-width: 44px; height: 32px; border: 0; background: transparent; color: var(--ink-2); cursor: pointer; border-radius: var(--r-s); }
+.step button:hover { background: var(--nude-2); }
+.step .bar { height: 76px; width: 100%; display: flex; align-items: flex-end; justify-content: center; }
+.step .bar i { display: block; width: 5px; height: calc(18% + var(--h) * 82%); background: var(--ink); border-radius: 3px 3px 1px 1px; transform-origin: bottom; transition: height .18s ease; }
+.step output { font-variant-numeric: tabular-nums; font-size: 17px; font-weight: 500; line-height: 1.1; }
+.step small { display: none; }
+.zone-ends { display: flex; justify-content: space-between; font-size: 13px; color: var(--muted); padding-inline: 4px; }
+.check { display: flex; align-items: center; gap: 10px; font-size: 15px; cursor: pointer; padding: 4px 0; }
+.check input { accent-color: var(--ink); width: 18px; height: 18px; margin: 0; }
 
-/* površine */
-.stage { border-radius: 4px; background: var(--stage); }
-.panel { border-radius: 4px; border-color: var(--line); padding: 20px; box-shadow: 0 1px 0 var(--line), 0 18px 40px -28px rgba(21,18,19,.35); }
-.label { font-family: var(--f-body); font-weight: 500; font-size: 10.5px; letter-spacing: .26em; color: var(--muted); }
-.label::before { content: ""; display: inline-block; width: 14px; height: 1px; background: var(--gold); vertical-align: middle; margin-right: 8px; }
-
-/* dugmad i izbori */
-.btn { border-radius: 2px; font-weight: 500; letter-spacing: .14em; text-transform: uppercase; font-size: 12.5px; padding: 13px 16px; }
-.btn.ghost { border-color: var(--ink); color: var(--ink); }
-.chip { border-radius: 2px; background: transparent; border-color: var(--line); font-size: 13.5px; letter-spacing: .02em; padding: 8px 13px; }
-.chip:hover { border-color: var(--gold-soft); }
-.chip[aria-pressed="true"] { background: var(--ink); color: var(--accent-ink); border-color: var(--ink); font-weight: 500; box-shadow: inset 0 -2px 0 var(--gold); }
-.tabs { background: transparent; border-bottom: 1px solid var(--line); border-radius: 0; padding: 0; gap: 0; }
-.tab { border-radius: 0; font-weight: 500; font-size: 12px; letter-spacing: .24em; text-transform: uppercase; padding: 12px 6px; }
-.tab[aria-selected="true"] { background: transparent; box-shadow: inset 0 -2px 0 var(--gold); color: var(--ink); }
-.step { background: transparent; border: 1px solid var(--line); border-radius: 2px; }
-.step output { font-family: var(--f-display); font-size: 19px; font-weight: 500; }
-.step button { color: var(--gold); }
-.zone-ends { font-size: 11.5px; letter-spacing: .04em; }
-.linkbtn { color: var(--gold); }
-.tag { border-radius: 2px; background: transparent; border: 1px solid var(--line); font-size: 12px; letter-spacing: .04em; }
-.suggest { border-radius: 2px; border-color: var(--gold-soft); background: color-mix(in srgb, var(--gold) 6%, transparent); }
-.suggest strong { font-family: var(--f-display); font-weight: 500; font-size: 16px; }
-.tips p { border-radius: 2px; background: transparent; border-left: 2px solid var(--gold); }
-.meas .v { font-family: var(--f-display); font-size: 15px; }
-.profile canvas { border-radius: 2px; }
-.check input { accent-color: var(--ink); }
-.hold { border-radius: 2px; letter-spacing: .12em; text-transform: uppercase; font-size: 11.5px !important; font-weight: 500; background: rgba(21,18,19,.82); }
-.overlay .hold[aria-pressed="true"] { background: var(--gold); color: #151213; }
-.empty svg { width: min(220px, 100%); }
-.empty p { font-weight: 300; }
-.empty .monogram { font-family: var(--f-display); font-style: italic; font-size: 22px; color: var(--ink); }
+/* analiza očiju */
+.meas { display: grid; grid-template-columns: 1fr auto auto; gap: 6px 18px; font-size: 14.5px; }
+.meas .h { color: var(--muted); font-size: 13px; }
+.meas .v { font-variant-numeric: tabular-nums; text-align: right; font-weight: 500; }
+.meas .full { grid-column: 2 / 4; text-align: center; }
+.tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.tag { font-size: 13.5px; padding: 5px 11px; border-radius: 999px; background: var(--nude); }
+.suggest { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 16px; border-radius: var(--r-m); background: var(--ink); color: var(--accent-ink); font-size: 14.5px; }
+.suggest strong { font-weight: 600; }
+.suggest .btn { padding: 8px 16px; font-size: 14px; background: var(--accent-ink); color: var(--ink); border-color: var(--accent-ink); flex: none; }
+.tips { display: grid; gap: 8px; }
+.tips p { margin: 0; font-size: 14.5px; padding: 11px 14px; border-radius: var(--r-m); background: var(--nude); }
+.tips p strong { font-weight: 600; }
+.tips p button { margin-left: 6px; font: inherit; font-size: 13.5px; font-weight: 500; color: var(--ink); background: var(--surface); border: 1px solid var(--nude-2); border-radius: 999px; padding: 3px 11px; cursor: pointer; }
+.profile { margin: 0; display: grid; gap: 6px; }
+.profile canvas { width: 100%; height: auto; border-radius: var(--r-m); background: var(--nude); }
+.profile figcaption { font-size: 13.5px; color: var(--muted); }
+.note { font-size: 13.5px; color: var(--muted); margin: 0; }
+#bBox { padding: 14px; border-radius: var(--r-m); border: 1px solid var(--line); }
 
 /* podnožje */
-.foot { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 6px 16px; padding-top: 14px; border-top: 1px solid var(--line); font-size: 12px; color: var(--muted); letter-spacing: .06em; }
-.foot .seal-logo { height: 22px; width: auto; opacity: .85; }
-@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .foot .seal-logo { filter: invert(1); } }
-:root[data-theme="dark"] .foot .seal-logo { filter: invert(1); }
-.foot .seal { font-family: var(--f-display); font-style: italic; color: var(--gold); letter-spacing: 0; font-size: 14px; }
+.foot { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 20px; padding-top: 18px; border-top: 1px solid var(--line); font-size: 13.5px; color: var(--muted); }
+.foot img { height: 20px; width: auto; display: block; opacity: .9; }
+
+/* ---------- telefon ---------- */
 @media (max-width: 860px) {
-  .brandmeta .place { display: none; }
-  .hero h1 { font-size: 26px; }
-  body.has-photo .brandbar { padding-block: 0 10px; }
-  body.has-photo .hero { display: none; }
-  .panel { padding: 16px; }
+  body { font-size: 16px; padding-top: max(14px, env(safe-area-inset-top, 0px)); }
+  .wrap { gap: 14px; }
+  .grid { grid-template-columns: minmax(0, 1fr); gap: 14px; }
+  .intro h1 { font-size: 31px; }
+  .intro p { font-size: 15.5px; }
+  .desk { display: none; }
+  body.has-photo .intro { display: none; }
+  body.has-photo .top { padding-bottom: 2px; }
+  body.has-photo .top .logo img { height: 30px; }
+  .stage { min-height: 300px; border-radius: var(--r-m); }
+  body.has-photo .stage { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; box-shadow: 0 10px 24px -14px rgba(40, 25, 22, .55); }
+  body.has-photo .stage canvas { max-height: 40vh; }
+  .overlay { gap: 6px; padding: 26px 8px 8px; }
+  .hold { padding: 9px 11px; font-size: 13.5px; }
+  .hold .t { display: none; }
+  .hold.keep .t { display: inline; }
+  .hold svg { width: 18px; height: 18px; }
+  .seg button { padding: 8px 13px; font-size: 13.5px; }
+  .panel { padding: 6px 14px 20px; border-radius: var(--r-m); }
+  .chip { padding: 12px 14px; }
+  .step button { height: 38px; font-size: 22px; }
+  .step .bar { height: 64px; }
+  .zones { gap: 2px; padding-inline: 2px; }
+  .btn { padding: 15px 18px; }
+  .stage.fs .hold .t { display: inline; }
 }
+@media (max-width: 380px) { .chips.cols { grid-template-columns: minmax(0, 1fr); } }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
 </style>
+</head>
+<body>
 
 <div class="wrap">
-  <div class="brandbar">
-    <a class="logo" href="#" aria-label="Lash Corner"><img src="logo.png" alt="Lash Corner" width="475" height="168"></a>
-    <div class="brandmeta"><span class="eyebrow">Lash proba</span><span class="place">Beograd · od 2012.</span></div>
-  </div>
-  <header class="hero">
-    <h1>Vaš novi pogled, <em>pre prvog dodira.</em></h1>
-    <p class="sub">Fotografišite klijentkinju i zajedno izaberite stil, tehniku i uvijenost pre tretmana. Fotografija ostaje na vašem uređaju.</p>
+  <header class="top">
+    <a class="logo" href="https://lash-corner.com/" aria-label="Lash Corner"><img src="logo.png" alt="Lash Corner" width="475" height="168"></a>
+    <span class="tool">Proba seta</span>
   </header>
+  <section class="intro">
+    <h1>Pokažite klijentkinji set pre nego što počnete</h1>
+    <p>Slikajte je spreda, izaberite stil, tehniku i uvijenost i trepavice se iscrtaju na njenom licu. Fotografija ostaje na ovom uređaju.</p>
+  </section>
 
-  <div class="grid">
+  <main class="grid">
     <div class="stage" id="stage">
       <div class="empty" id="empty">
         <svg viewBox="0 0 260 120" aria-hidden="true">
-          <path d="M20 78 Q130 10 240 78 Q130 112 20 78Z" fill="none" stroke="var(--muted)" stroke-width="2" opacity=".5"/>
-          <circle cx="130" cy="72" r="24" fill="var(--muted)" opacity=".25"/>
-          <g stroke="var(--ink)" stroke-linecap="round" fill="none" opacity=".75">
+          <path d="M20 78 Q130 10 240 78 Q130 112 20 78Z" fill="none" stroke="currentColor" stroke-width="1.6" opacity=".35"/>
+          <circle cx="130" cy="72" r="24" fill="currentColor" opacity=".12"/>
+          <g stroke="currentColor" stroke-linecap="round" fill="none" stroke-width="2.2">
             <path d="M64 52 q-3 -12 0 -21"/><path d="M82 45 q-1 -13 3 -23"/><path d="M100 40 q0 -14 5 -24"/>
             <path d="M118 37 q2 -14 8 -24"/><path d="M136 36 q4 -14 11 -23"/><path d="M154 38 q6 -13 14 -21"/><path d="M172 42 q8 -12 17 -19"/>
             <path d="M190 49 q9 -10 19 -15"/><path d="M206 57 q10 -8 20 -11"/><path d="M220 66 q10 -6 19 -7"/>
           </g>
         </svg>
-        <span class="monogram">Isprobajte set</span>
-        <div class="pickrow" style="width:100%">
-          <button class="btn" type="button" data-act="shoot">Slikaj se</button>
-          <button class="btn ghost" type="button" data-act="pick">Izaberi sliku</button>
+        <h2>Krenite od fotografije</h2>
+        <div class="pickrow">
+          <button class="btn" type="button" data-act="shoot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg>Slikaj</button>
+          <button class="btn ghost" type="button" data-act="pick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="5" width="16" height="14" rx="2"/><path d="m4 16 5-5 4 4 2-2 5 5"/></svg>Iz galerije</button>
         </div>
-        <p>Slikaj se ili izaberi sliku iz galerije.<span class="desk"> Sa nekog sajta: desni klik na sliku → <strong>Kopiraj sliku</strong>, pa ovde <strong>Ctrl+V</strong>.</span> Najbolje radi slika spreda, oči otvorene, dobro svetlo.</p>
+        <p>Lice spreda, oči otvorene, dnevno svetlo.<span class="desk"> Sliku sa sajta kopirajte desnim klikom i ovde pritisnite Ctrl+V.</span></p>
       </div>
       <canvas id="cv" hidden></canvas>
       <div class="overlay" id="overlay" hidden>
-        <button class="hold" id="newPhoto" type="button">Nova slika</button>
-        <button class="hold" id="editBtn" type="button" aria-pressed="false">Podesi oči</button>
-        <button class="hold" id="fsBtn" type="button" aria-pressed="false">Ceo ekran</button>
-        <button class="hold" id="before" type="button" aria-pressed="false">Prikaži PRE</button>
+        <div class="seg" role="group" aria-label="Prikaz">
+          <button type="button" id="before" aria-pressed="false">Pre</button><button type="button" id="after" aria-pressed="true">Posle</button>
+        </div>
+        <span class="spacer"></span>
+        <button class="hold" id="editBtn" type="button" aria-pressed="false" aria-label="Podesi oči"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M3 13c3-4 6-6 9-6s6 2 9 6"/><circle cx="6" cy="11.3" r="1.6" fill="currentColor"/><circle cx="12" cy="7" r="1.6" fill="currentColor"/><circle cx="18" cy="11.3" r="1.6" fill="currentColor"/></svg><span class="t">Podesi oči</span></button>
+        <button class="hold" id="fsBtn" type="button" aria-pressed="false" aria-label="Ceo ekran"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg><span class="t">Ceo ekran</span></button>
+        <button class="hold" id="newPhoto" type="button" aria-label="Nova slika"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg><span class="t">Nova slika</span></button>
       </div>
       <div class="status" id="status" hidden></div>
-      <div class="edit-hint rot-hint" id="rotHint">Okreni telefon položeno za veći prikaz.</div>
-      <div class="edit-hint" id="editHint" hidden>Prevuci tačke na liniju gde rastu trepavice. Kad završiš, pritisni Gotovo.</div>
+      <div class="edit-hint rot-hint" id="rotHint">Okrenite telefon položeno za veći prikaz.</div>
+      <div class="edit-hint" id="editHint" hidden>Prevucite tačke na liniju iz koje rastu trepavice, pa pritisnite Gotovo.</div>
     </div>
 
     <aside class="panel">
@@ -286,10 +299,12 @@ body { font-family: var(--f-body); font-weight: 400; letter-spacing: .01em; }
       <input type="file" id="cam" accept="image/*" capture="user" hidden>
       <div class="group" id="pickGroup" hidden>
         <div class="pickrow">
-          <button class="btn" id="shoot" type="button">Slikaj se</button>
-          <button class="btn ghost" id="pick" type="button">Izaberi sliku</button>
+          <button class="btn" id="shoot" type="button">Slikaj</button>
+          <button class="btn ghost" id="pick" type="button">Iz galerije</button>
         </div>
       </div>
+
+      <dl class="recipe" id="recipe" aria-live="polite"></dl>
 
       <div class="tabs" role="tablist">
         <button class="tab" role="tab" type="button" data-tab="set" aria-selected="true">Set</button>
@@ -298,44 +313,44 @@ body { font-family: var(--f-body); font-weight: 400; letter-spacing: .01em; }
       </div>
 
       <div class="tabpane" data-pane="set">
-        <div class="row"><p class="label">Stil</p><div class="chips" id="styles">
+        <div class="row"><p class="label">Stil</p><div class="chips cols" id="styles">
           <button class="chip" type="button" data-v="natural" aria-pressed="false">Natural</button>
           <button class="chip" type="button" data-v="cat" aria-pressed="true">Cat eye</button>
           <button class="chip" type="button" data-v="doll" aria-pressed="false">Doll eye</button>
           <button class="chip" type="button" data-v="squirrel" aria-pressed="false">Squirrel</button>
-          <button class="chip" type="button" data-v="wispy" aria-pressed="false">Wispy (Kim K)</button>
+          <button class="chip" type="button" data-v="wispy" aria-pressed="false">Wispy <small>Kim K</small></button>
           <button class="chip" type="button" data-v="liner" aria-pressed="false">Eyeliner efekat</button>
         </div></div>
-        <div class="row"><p class="label">Tehnika</p><div class="chips" id="types">
-          <button class="chip" type="button" data-v="classic" aria-pressed="true">Klasična 1D</button>
-          <button class="chip" type="button" data-v="hybrid" aria-pressed="false">Hybrid</button>
-          <button class="chip" type="button" data-v="light" aria-pressed="false">Lagani volumen 2–3D</button>
-          <button class="chip" type="button" data-v="medium" aria-pressed="false">Medium volumen 2–5D</button>
-          <button class="chip" type="button" data-v="mega" aria-pressed="false">Mega volumen 6+D</button>
+        <div class="row"><p class="label">Tehnika</p><div class="chips cols" id="types">
+          <button class="chip" type="button" data-v="classic" aria-pressed="true">Klasika <small>1D</small></button>
+          <button class="chip" type="button" data-v="hybrid" aria-pressed="false">Hybrid <small>1–3D</small></button>
+          <button class="chip" type="button" data-v="light" aria-pressed="false">Lagani volumen <small>2–3D</small></button>
+          <button class="chip" type="button" data-v="medium" aria-pressed="false">Medium volumen <small>2–5D</small></button>
+          <button class="chip" type="button" data-v="mega" aria-pressed="false">Mega volumen <small>6D+</small></button>
         </div></div>
         <div class="row">
           <p class="label">Uvijenost <button class="linkbtn" id="curlToggle" type="button" aria-expanded="false">pogled sa strane</button></p>
           <div class="chips" id="curls">
-          <button class="chip" type="button" data-v="C" aria-pressed="false">C</button>
-          <button class="chip" type="button" data-v="CC" aria-pressed="true">CC</button>
-          <button class="chip" type="button" data-v="D" aria-pressed="false">D</button>
-          <button class="chip" type="button" data-v="L" aria-pressed="false">Extreme (L)</button>
-        </div>
+            <button class="chip" type="button" data-v="C" aria-pressed="false">C</button>
+            <button class="chip" type="button" data-v="CC" aria-pressed="true">CC</button>
+            <button class="chip" type="button" data-v="D" aria-pressed="false">D</button>
+            <button class="chip" type="button" data-v="L" aria-pressed="false">L</button>
+          </div>
           <figure class="profile" id="curlFig" hidden>
             <canvas id="curlCv" width="600" height="300" aria-label="Pogled sa strane na uvijenost trepavice"></canvas>
             <figcaption id="curlCap">Pogled sa strane</figcaption>
           </figure>
         </div>
         <div class="row">
-          <p class="label">Dužine (mm)</p>
-          <div class="chips" id="nzones" aria-label="Broj zona">
-          <button class="chip" type="button" data-v="5" aria-pressed="false">5 zona</button>
-          <button class="chip" type="button" data-v="6" aria-pressed="false">6</button>
-          <button class="chip" type="button" data-v="7" aria-pressed="false">7</button>
-          <button class="chip" type="button" data-v="8" aria-pressed="true">8</button>
-        </div>
+          <div class="label"><span style="white-space:nowrap">Dužine (mm)</span>
+          <div class="chips tight mini" id="nzones" aria-label="Broj zona"><span>Zone</span>
+            <button class="chip" type="button" data-v="5" aria-pressed="false">5</button>
+            <button class="chip" type="button" data-v="6" aria-pressed="false">6</button>
+            <button class="chip" type="button" data-v="7" aria-pressed="false">7</button>
+            <button class="chip" type="button" data-v="8" aria-pressed="true">8</button>
+          </div></div>
           <div id="zoneRows"></div>
-          <div class="zone-ends"><span>← unutrašnji ugao</span><span>spoljni ugao →</span></div>
+          <div class="zone-ends"><span>unutrašnji ugao</span><span>spoljni ugao</span></div>
           <label class="check"><input type="checkbox" id="split"> Posebne dužine za svako oko</label>
         </div>
       </div>
@@ -348,24 +363,24 @@ body { font-family: var(--f-body); font-weight: 400; letter-spacing: .01em; }
           <div class="tips" id="tips"></div>
           <p class="note">Mere su procena iz fotografije (prema veličini dužice), tačne na oko pola milimetra.</p>
         </div>
-        <p class="note" id="noAnalysis">Ubaci fotografiju lica spreda, pa ovde vidiš mere očiju i predlog stila.</p>
+        <p class="note" id="noAnalysis">Kad ubacite fotografiju lica spreda, ovde se pojave mere očiju i predlog stila.</p>
       </div>
 
       <div class="tabpane" data-pane="prikaz" hidden>
         <div class="row"><p class="label">Kadar</p><div class="chips" id="views">
-          <button class="chip" type="button" data-v="eyes" aria-pressed="true">Oči</button>
+          <button class="chip" type="button" data-v="eyes" aria-pressed="true">Oči izbliza</button>
           <button class="chip" type="button" data-v="face" aria-pressed="false">Celo lice</button>
         </div></div>
         <div class="row">
-          <p class="label">Linije na slici</p>
+          <p class="label">Pomoćne linije</p>
           <label class="check"><input type="checkbox" id="showZones" checked> Lash mapa (zone i dužine)</label>
           <label class="check"><input type="checkbox" id="showFlick"> Pravac spoljnog ugla</label>
           <label class="check"><input type="checkbox" id="showBrow"> Brow mapping</label>
-          <label class="check"><input type="checkbox" id="showMeas"> Mere (odstojanja)</label>
+          <label class="check"><input type="checkbox" id="showMeas"> Mere i odstojanja</label>
         </div>
         <div class="row">
-          <p class="label">Uporedi</p>
-          <label class="check"><input type="checkbox" id="compare"> Druga varijanta (B) ispod</label>
+          <p class="label">Uporedi dva seta</p>
+          <label class="check"><input type="checkbox" id="compare"> Prikaži drugi set ispod</label>
           <div class="group" id="bBox" hidden>
           <div class="chips" id="bStyles">
             <button class="chip" type="button" data-v="natural" aria-pressed="true">Natural</button>
@@ -374,28 +389,28 @@ body { font-family: var(--f-body); font-weight: 400; letter-spacing: .01em; }
             <button class="chip" type="button" data-v="squirrel" aria-pressed="false">Squirrel</button>
           </div>
           <div class="chips" id="bTypes">
-            <button class="chip" type="button" data-v="classic" aria-pressed="false">Klasična 1D</button>
+            <button class="chip" type="button" data-v="classic" aria-pressed="false">Klasika 1D</button>
             <button class="chip" type="button" data-v="hybrid" aria-pressed="false">Hybrid</button>
             <button class="chip" type="button" data-v="light" aria-pressed="false">Lagani 2–3D</button>
             <button class="chip" type="button" data-v="medium" aria-pressed="true">Medium 2–5D</button>
-            <button class="chip" type="button" data-v="mega" aria-pressed="false">Mega 6+D</button>
+            <button class="chip" type="button" data-v="mega" aria-pressed="false">Mega 6D+</button>
           </div>
           <div class="chips" id="bCurls">
             <button class="chip" type="button" data-v="C" aria-pressed="false">C</button>
             <button class="chip" type="button" data-v="CC" aria-pressed="false">CC</button>
             <button class="chip" type="button" data-v="D" aria-pressed="true">D</button>
-            <button class="chip" type="button" data-v="L" aria-pressed="false">Extreme (L)</button>
+            <button class="chip" type="button" data-v="L" aria-pressed="false">L</button>
           </div>
-          <p class="note">Gore je varijanta A (kartica Set), dole varijanta B.</p>
+          <p class="note">Gore je set sa kartice Set, dole ovaj drugi.</p>
         </div>
         </div>
         <p class="note">Okvirna simulacija za razgovor sa klijentkinjom, ne tačan rezultat.</p>
       </div>
     </aside>
-  </div>
-</div>
+  </main>
 
-<div class="wrap"><footer class="foot"><img class="seal-logo" src="logo.png" alt="Lash Corner" width="475" height="168"><span>Ruski volumen · Eyeliner efekat · Klasika</span><span>Okvirna simulacija za konsultaciju</span></footer></div>
+  <footer class="foot"><img src="logo.png" alt="Lash Corner" width="475" height="168"><span>Okvirna simulacija za konsultaciju u salonu</span></footer>
+</div>
 <script src="https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh@0.4.1633559619/face_mesh.js" crossorigin="anonymous"></script>
 <script>
 (() => {
@@ -786,8 +801,8 @@ body { font-family: var(--f-body); font-weight: 400; letter-spacing: .01em; }
     const ps = pxScale(k);
     for (const s of ["R", "L"]) {
       const g = geo.side[s], d = norm(sub(g.hits.end, g.outer)), L = len(sub(g.hits.end, g.outer));
-      polyline([g.outer, add(g.outer, mul(d, L * 0.85))], 1.6 * ps, "#ffd23f", [6 * ps, 4 * ps]);
-      dotAt(g.outer, 3 * ps, "#ffd23f");
+      polyline([g.outer, add(g.outer, mul(d, L * 0.85))], 1.6 * ps, "#ffffff", [6 * ps, 4 * ps]);
+      dotAt(g.outer, 3 * ps, "#ffffff");
     }
   }
   const pxScale = (k) => (cv.width / (cv.clientWidth || cv.width)) / k;   // veličina slova kao na ekranu
@@ -799,18 +814,18 @@ body { font-family: var(--f-body); font-weight: 400; letter-spacing: .01em; }
       ctx.save(); ctx.lineCap = "round"; ctx.lineJoin = "round"; ctx.beginPath();
       const a = Math.round(START * (pts.length - 1)), e = Math.round(END * (pts.length - 1));
       for (let i = a; i <= e; i++) i === a ? ctx.moveTo(pts[i].x, pts[i].y) : ctx.lineTo(pts[i].x, pts[i].y);
-      const ps = pxScale(k); ctx.strokeStyle = "rgba(0,0,0,.4)"; ctx.lineWidth = 3 * ps; ctx.stroke(); ctx.strokeStyle = "#ffd23f"; ctx.lineWidth = 1.4 * ps; ctx.stroke(); ctx.restore();
+      const ps = pxScale(k); ctx.strokeStyle = "rgba(0,0,0,.4)"; ctx.lineWidth = 3 * ps; ctx.stroke(); ctx.strokeStyle = "#ffffff"; ctx.lineWidth = 1.4 * ps; ctx.stroke(); ctx.restore();
       const nz = cfg.len[s].length;
       for (let z = 0; z <= nz; z++) {
         const t = START + (END - START) * z / nz, i = Math.round(t * (pts.length - 1)), n = normalAt(pts, i, geo.up);
-        line(sub(pts[i], mul(n, g.mmPx * 0.8)), add(pts[i], mul(n, g.mmPx * 1.6)), 1.1 * pxScale(k), "#ffd23f");
+        line(sub(pts[i], mul(n, g.mmPx * 0.8)), add(pts[i], mul(n, g.mmPx * 1.6)), 1.1 * pxScale(k), "#ffffff");
       }
       for (let z = 0; z < nz; z++) {
         const t = START + (END - START) * (z + 0.5) / nz, i = Math.round(t * (pts.length - 1)), n = normalAt(pts, i, geo.up);
         const arr = cfg.len[s], lz = lengthAt(t, arr);
         const p = add(add(pts[i], mul(n, lz * g.mmPx * 0.6 + fs)), mul(g.outward, lz * g.mmPx * 0.25 * t));
-        ctx.save(); ctx.font = `600 ${fs}px "IBM Plex Mono", monospace`; ctx.textAlign = "center"; ctx.textBaseline = "middle";
-        ctx.lineWidth = fs * 0.3; ctx.strokeStyle = "rgba(0,0,0,.7)"; ctx.strokeText(arr[z], p.x, p.y);
+        ctx.save(); ctx.font = `500 ${fs}px Jost, system-ui, sans-serif`; ctx.textAlign = "center"; ctx.textBaseline = "middle";
+        ctx.lineJoin = "round"; ctx.lineWidth = fs * 0.24; ctx.strokeStyle = "rgba(20,14,15,.6)"; ctx.strokeText(arr[z], p.x, p.y);
         ctx.fillStyle = "#fff"; ctx.fillText(arr[z], p.x, p.y); ctx.restore();
       }
     }
@@ -858,8 +873,8 @@ body { font-family: var(--f-body); font-weight: 400; letter-spacing: .01em; }
   }
 
   function label(text, p, fs) {
-    ctx.save(); ctx.font = `600 ${fs}px "IBM Plex Mono", monospace`; ctx.textAlign = "center"; ctx.textBaseline = "middle";
-    ctx.lineWidth = fs * 0.3; ctx.strokeStyle = "rgba(0,0,0,.7)"; ctx.strokeText(text, p.x, p.y);
+    ctx.save(); ctx.font = `500 ${fs}px Jost, system-ui, sans-serif`; ctx.textAlign = "center"; ctx.textBaseline = "middle";
+    ctx.lineJoin = "round"; ctx.lineWidth = fs * 0.24; ctx.strokeStyle = "rgba(20,14,15,.6)"; ctx.strokeText(text, p.x, p.y);
     ctx.fillStyle = "#fff"; ctx.fillText(text, p.x, p.y); ctx.restore();
   }
   function line(a, b, w, color, dash) {
@@ -880,8 +895,8 @@ body { font-family: var(--f-body); font-weight: 400; letter-spacing: .01em; }
     const low = Math.min(...[R.inner, L.inner].map((p) => dot(p, geo.up))) - R.mmPx * 9;
     const drop = (p) => add(p, mul(geo.up, low - dot(p, geo.up)));
     const a = drop(R.inner), b = drop(L.inner);
-    line(R.inner, a, w * 0.7, "#ffd23f", [4 / k, 4 / k]); line(L.inner, b, w * 0.7, "#ffd23f", [4 / k, 4 / k]);
-    line(a, b, w, "#ffd23f"); label(geo.gap.toFixed(1) + " mm", add(mul(add(a, b), 0.5), mul(geo.up, -fs * 0.9)), fs);
+    line(R.inner, a, w * 0.7, "#ffffff", [4 / k, 4 / k]); line(L.inner, b, w * 0.7, "#ffffff", [4 / k, 4 / k]);
+    line(a, b, w, "#ffffff"); label(geo.gap.toFixed(1) + " mm", add(mul(add(a, b), 0.5), mul(geo.up, -fs * 0.9)), fs);
   }
 
   // ---------- kontrole ----------
@@ -896,7 +911,7 @@ body { font-family: var(--f-body); font-weight: 400; letter-spacing: .01em; }
       const arr = st.len[eye || "R"];
       arr.forEach((v, i) => {
         const el = document.createElement("div"); el.className = "step";
-        el.innerHTML = `<button type="button" aria-label="Duže, zona ${i + 1}">+</button><output>${v}</output><button type="button" aria-label="Kraće, zona ${i + 1}">−</button><small>${NZ > 6 ? "" : "zona "}${i + 1}</small>`;
+        el.innerHTML = `<button type="button" aria-label="Duže, zona ${i + 1}">+</button><span class="bar" aria-hidden="true"><i style="--h:${((v - 5) / 11).toFixed(3)}"></i></span><output aria-label="Zona ${i + 1}: ${v} mm">${v}</output><button type="button" aria-label="Kraće, zona ${i + 1}">−</button>`;
         const [plus, minus] = el.querySelectorAll("button");
         const change = (d) => { for (const e of eye ? [eye] : ["L", "R"]) st.len[e][i] = Math.min(16, Math.max(5, st.len[e][i] + d)); markStyle(); renderZones(); redraw(); };
         plus.onclick = () => change(1); minus.onclick = () => change(-1);
@@ -993,10 +1008,20 @@ body { font-family: var(--f-body); font-weight: 400; letter-spacing: .01em; }
   chipGroup("views", (v) => { view = v; });
   let rz; window.addEventListener("resize", () => { clearTimeout(rz); rz = setTimeout(() => { if (vw) vw.frozen = false; layer = null; layerB = null; draw(); if (editing && vw) vw.frozen = true; }, 150); });
   renderZones();
+  // sažetak izabranog seta
+  const pickedText = (id) => { const c = document.querySelector(`#${id} .chip[aria-pressed="true"]`); return c ? c.textContent.replace(/\s+/g, " ").trim() : ""; };
+  function updRecipe() {
+    const all = [...st.len.L, ...st.len.R], lo = Math.min(...all), hi = Math.max(...all);
+    const parts = [["Stil", pickedText("styles") || "Po meri"], ["Tehnika", pickedText("types")], ["Uvijenost", pickedText("curls")], ["Dužine", (lo === hi ? lo : lo + "–" + hi) + " mm"]];
+    $("recipe").innerHTML = parts.map(([k, v]) => `<div><dt>${k}</dt><dd>${v.replace(/ (\S+)$/, "&nbsp;$1")}</dd></div>`).join("");
+  }
+  new MutationObserver(updRecipe).observe(document.querySelector(".panel"), { subtree: true, attributes: true, attributeFilter: ["aria-pressed"] });
+  new MutationObserver(updRecipe).observe($("zoneRows"), { childList: true });
+  updRecipe();
 
   const b4 = $("before");
-  const setB = (v) => { showBefore = v; b4.textContent = v ? "Prikaži POSLE" : "Prikaži PRE"; b4.setAttribute("aria-pressed", String(v)); draw(); };
-  b4.addEventListener("click", () => setB(!showBefore));
+  const setB = (v) => { showBefore = v; b4.setAttribute("aria-pressed", String(v)); $("after").setAttribute("aria-pressed", String(!v)); draw(); };
+  b4.addEventListener("click", () => setB(true)); $("after").addEventListener("click", () => setB(false));
 
   // ---------- učitavanje ----------
   function initMesh() {
@@ -1122,7 +1147,7 @@ body { font-family: var(--f-body); font-weight: 400; letter-spacing: .01em; }
   function setEditing(on) {
     if (!geo) return;
     editing = on; dragging = null;
-    $("editBtn").setAttribute("aria-pressed", String(on)); $("editBtn").textContent = on ? "Gotovo" : "Podesi oči";
+    $("editBtn").setAttribute("aria-pressed", String(on)); $("editBtn").querySelector(".t").textContent = on ? "Gotovo" : "Podesi oči"; $("editBtn").setAttribute("aria-label", on ? "Gotovo" : "Podesi oči"); $("editBtn").classList.toggle("keep", on);
     stage.classList.toggle("editing", on); $("editHint").hidden = !on;
     if (on) { setView(); vw.frozen = true; } else if (vw) vw.frozen = false;
     layer = null; layerB = null; draw();
@@ -1131,7 +1156,7 @@ body { font-family: var(--f-body); font-weight: 400; letter-spacing: .01em; }
   let fsOn = false, fsAuto = false;
   function setFs(on) {
     fsOn = on; stage.classList.toggle("fs", on); document.body.classList.toggle("fs-open", on);
-    $("fsBtn").textContent = on ? "Zatvori" : "Ceo ekran"; $("fsBtn").setAttribute("aria-pressed", String(on));
+    $("fsBtn").querySelector(".t").textContent = on ? "Zatvori" : "Ceo ekran"; $("fsBtn").setAttribute("aria-label", on ? "Zatvori" : "Ceo ekran"); $("fsBtn").setAttribute("aria-pressed", String(on));
     try { if (on && stage.requestFullscreen && !document.fullscreenElement) stage.requestFullscreen().catch(() => {}); if (!on && document.fullscreenElement) document.exitFullscreen().catch(() => {}); } catch (e) {}
     requestAnimationFrame(() => { if (vw) vw.frozen = false; layer = null; layerB = null; draw(); if (editing && vw) vw.frozen = true; });
   }
