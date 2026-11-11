@@ -171,7 +171,8 @@ body.fs-open { overflow: hidden; }
 .chip[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
 .chip[aria-pressed="true"] small { color: inherit; opacity: .72; }
 .chips.tight .chip { justify-content: center; text-align: center; min-width: 52px; }
-#types { grid-template-columns: minmax(0, 1fr); }
+#types { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+#types .chip { justify-content: center; }
 .chip small { white-space: nowrap; }
 #curls { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); }
 #curls .chip { justify-content: center; }
@@ -322,10 +323,12 @@ body.fs-open { overflow: hidden; }
           <button class="chip" type="button" data-v="liner" aria-pressed="false">Eyeliner efekat</button>
         </div></div>
         <div class="row"><p class="label">Tehnika</p><div class="chips cols" id="types">
-          <button class="chip" type="button" data-v="classic" aria-pressed="true">Klasika <small>1D</small></button>
-          <button class="chip" type="button" data-v="light" aria-pressed="false">Lagani volumen <small>2–3D</small></button>
-          <button class="chip" type="button" data-v="medium" aria-pressed="false">Medium volumen <small>2–5D</small></button>
-          <button class="chip" type="button" data-v="mega" aria-pressed="false">Mega volumen <small>6D+</small></button>
+          <button class="chip" type="button" data-v="classic" aria-pressed="true">Klasika 1:1</button>
+          <button class="chip" type="button" data-v="d2" aria-pressed="false">2D</button>
+          <button class="chip" type="button" data-v="d3" aria-pressed="false">3D</button>
+          <button class="chip" type="button" data-v="d4" aria-pressed="false">4D</button>
+          <button class="chip" type="button" data-v="d8" aria-pressed="false">8D</button>
+          <button class="chip" type="button" data-v="d12" aria-pressed="false">12D</button>
         </div></div>
         <div class="row">
           <p class="label">Uvijenost <button class="linkbtn" id="curlToggle" type="button" aria-expanded="false">pogled sa strane</button></p>
@@ -389,10 +392,12 @@ body.fs-open { overflow: hidden; }
             <button class="chip" type="button" data-v="squirrel" aria-pressed="false">Squirrel</button>
           </div>
           <div class="chips" id="bTypes">
-            <button class="chip" type="button" data-v="classic" aria-pressed="false">Klasika 1D</button>
-            <button class="chip" type="button" data-v="light" aria-pressed="false">Lagani 2–3D</button>
-            <button class="chip" type="button" data-v="medium" aria-pressed="true">Medium 2–5D</button>
-            <button class="chip" type="button" data-v="mega" aria-pressed="false">Mega 6D+</button>
+            <button class="chip" type="button" data-v="classic" aria-pressed="false">Klasika 1:1</button>
+            <button class="chip" type="button" data-v="d2" aria-pressed="false">2D</button>
+            <button class="chip" type="button" data-v="d3" aria-pressed="false">3D</button>
+            <button class="chip" type="button" data-v="d4" aria-pressed="true">4D</button>
+            <button class="chip" type="button" data-v="d8" aria-pressed="false">8D</button>
+            <button class="chip" type="button" data-v="d12" aria-pressed="false">12D</button>
           </div>
           <div class="chips" id="bCurls">
             <button class="chip" type="button" data-v="C" aria-pressed="false">C</button>
@@ -435,12 +440,21 @@ body.fs-open { overflow: hidden; }
   const styleArr = (name) => resampleArr(STYLE_BASE[name], NZ);
   const STYLES = new Proxy({}, { get: (_, k) => styleArr(k), ownKeys: () => Object.keys(STYLE_BASE), getOwnPropertyDescriptor: () => ({ enumerable: true, configurable: true }) });
   const st = { len: { L: styleArr("cat"), R: styleArr("cat") }, split: false, type: "classic", curl: "CC" };
-  const B = { style: "natural", type: "medium", curl: "D", compare: false };
+  const B = { style: "natural", type: "d4", curl: "D", compare: false };
   const isWispy = (len) => ["L", "R"].every((e) => styleArr("wispy").every((v, i) => v === len[e][i]));
   const isStyle = (name, len) => ["L", "R"].every((e) => styleArr(name).every((v, i) => v === len[e][i]));
   const cfgA = () => ({ len: st.len, type: st.type, curl: st.curl, wispy: isWispy(st.len), liner: isStyle("liner", st.len) });
   const cfgB = () => ({ len: { L: STYLES[B.style], R: STYLES[B.style] }, type: B.type, curl: B.curl, wispy: B.style === "wispy", liner: B.style === "liner" });
-  const TYPE_NAMES = { classic: "Klasična 1D", hybrid: "Hybrid", light: "Lagani 2–3D", medium: "Medium 2–5D", mega: "Mega 6+D" };
+  // tehnike u salonu: klasika 1:1 i lepeze 2D–12D. d = debljina pojedinačne trepavice u mm
+  const TYPES = {
+    classic: { name: "Klasika 1:1", n: 1,  d: 0.12, cover: 0.88, vol: 0,    sp: 0.7,  pull: 0.25, band: 0.35, haze: 0.1 },
+    d2:      { name: "2D",          n: 2,  d: 0.10, cover: 0.92, vol: 0.4,  sp: 0.9,  pull: 0.45, band: 0.55, haze: 0.12 },
+    d3:      { name: "3D",          n: 3,  d: 0.07, cover: 0.94, vol: 0.55, sp: 1.0,  pull: 0.55, band: 0.7,  haze: 0.14 },
+    d4:      { name: "4D",          n: 4,  d: 0.07, cover: 0.95, vol: 0.7,  sp: 0.95, pull: 0.62, band: 0.8,  haze: 0.15 },
+    d8:      { name: "8D",          n: 8,  d: 0.04, cover: 0.97, vol: 0.9,  sp: 0.85, pull: 0.68, band: 0.92, haze: 0.17 },
+    d12:     { name: "12D",         n: 12, d: 0.03, cover: 0.98, vol: 1,    sp: 0.8,  pull: 0.72, band: 1,    haze: 0.18 },
+  };
+  const TYPE_NAMES = Object.fromEntries(Object.entries(TYPES).map(([k, v]) => [k, v.name]));
 
   // MediaPipe tačke (R = desno oko osobe = levo na slici)
   const IDX = {
@@ -589,15 +603,10 @@ body.fs-open { overflow: hidden; }
   // • Debljine: klasika 0,12 mm (0,15 samo za jake prirodne); lagani volumen 0,07; medium 0,05; mega 0,03 (4 × 0,07 ≈ težina jedne 0,15).
   const NAT_PER_MM = 4.2, NAT_D = 0.11, GLUE_GAP = 0.7, STEM = 0.6;
   const unitFor = (type, r) => {
-    switch (type) {
-      case "classic": return { n: 1, d: 0.12 };
-      case "hybrid":  return r() < 0.5 ? { n: 1, d: 0.12 } : { n: 2 + Math.floor(r() * 2), d: 0.07 };
-      case "light":   return { n: 2 + Math.floor(r() * 2), d: 0.07 };
-      case "medium":  return { n: 3 + Math.floor(r() * 3), d: 0.05 };
-      default:        return { n: 7 + Math.floor(r() * 4), d: 0.03 };   // mega
-    }
+    const t = TYPES[type] || TYPES.classic;
+    return { n: t.n, d: t.d };
   };
-  const COVER = { classic: 0.88, hybrid: 0.92, light: 0.94, medium: 0.96, mega: 0.98 };   // udeo prirodnih trepavica koje dobiju ekstenziju
+  const COVER = Object.fromEntries(Object.entries(TYPES).map(([k, v]) => [k, v.cover]));   // udeo prirodnih trepavica koje dobiju ekstenziju
 
   // jedna trepavica kao ispunjena traka koja se sužava (tačna debljina i ispod piksela, bez "tačkica" na spojevima)
   function ribbon(x, p0, cp, p2, w, taperFrom) {
@@ -631,7 +640,7 @@ body.fs-open { overflow: hidden; }
       const g = geo.side[s], r = rng(s === "R" ? 21 : 34), pts = g.lid, mm = g.mmPx, lens = cfg.len[s];
       let lidLen = 0; for (let i = 1; i < pts.length; i++) lidLen += len(sub(pts[i], pts[i - 1]));
       const nat = Math.round((lidLen / mm) * NAT_PER_MM), lidMm = lidLen / mm, cph = r() * 6.28;
-      const vol = { classic: 0, hybrid: 0.4, light: 0.55, medium: 0.8, mega: 1 }[cfg.type];
+      const vol = TYPES[cfg.type].vol;
       const clump = (t) => Math.sin(6.283 * (t * lidMm) / 1.3 + cph) * 0.5 + Math.sin(6.283 * (t * lidMm) / 0.55 + cph * 2) * 0.25;
       // položaj na kapku -> tačka, normala i pravac trepavice (počešljano)
       const geomAt = (t) => {
@@ -642,8 +651,8 @@ body.fs-open { overflow: hidden; }
         return { p: pts[i], n0, dir: norm(add(mul(n0, Math.cos(bb)), mul(g.outward, Math.sin(bb)))) };
       };
       // šiljci: susedne trepavice se pri vrhu spajaju u šiljak (kod volumena jače); razmak šiljaka u mm
-      const SP = { classic: 0.7, hybrid: 0.9, light: 1.0, medium: 0.9, mega: 0.8 }[cfg.type];
-      const PULL = { classic: 0.25, hybrid: 0.5, light: 0.55, medium: 0.65, mega: 0.72 }[cfg.type];
+      const SP = TYPES[cfg.type].sp;
+      const PULL = TYPES[cfg.type].pull;
       const hash = (n) => { const v = Math.sin(n * 12.9898 + (s === "R" ? 3.1 : 7.7)) * 43758.5453; return v - Math.floor(v); };
       const spikeTip = (t, extOf) => {
         const idx = Math.round((t * lidMm) / SP + (hash(Math.floor(t * lidMm / SP)) - 0.5) * 0.9);   // nepravilan razmak šiljaka
@@ -689,7 +698,7 @@ body.fs-open { overflow: hidden; }
       }
     }
     // gusta crna baza: lepeze se pri korenu preklapaju u punu traku (kod nje izgleda kao ajlajner)
-    const band = cfg.liner ? 1.6 : { classic: 0.35, hybrid: 0.6, light: 0.7, medium: 0.85, mega: 1 }[cfg.type];
+    const band = cfg.liner ? 1.6 : TYPES[cfg.type].band;
     x.fillStyle = geo.lashCol[0];
     for (const s of ["R", "L"]) {
       const g = geo.side[s], pts = g.lid, mm = g.mmPx, a0 = Math.round(START * (pts.length - 1)), e0 = Math.round(END * (pts.length - 1));
@@ -711,7 +720,7 @@ body.fs-open { overflow: hidden; }
       const g = geo.side[s], pts = g.lid, a = Math.round(START * (pts.length - 1)), e = Math.round(END * (pts.length - 1));
       sx.beginPath();
       for (let i = a; i <= e; i++) { const q = sub(pts[i], mul(normalAt(pts, i, geo.up), g.mmPx * 0.5)); i === a ? sx.moveTo(q.x, q.y) : sx.lineTo(q.x, q.y); }
-      sx.strokeStyle = geo.lashCol[0]; sx.globalAlpha = { classic: 0.1, hybrid: 0.13, light: 0.14, medium: 0.16, mega: 0.18 }[cfg.type]; sx.lineWidth = g.mmPx * 1.3; sx.stroke();
+      sx.strokeStyle = geo.lashCol[0]; sx.globalAlpha = TYPES[cfg.type].haze; sx.lineWidth = g.mmPx * 1.3; sx.stroke();
     }
     // omekšaj kao da je trepavica snimljena istim telefonom: pikseli fotografije + njena mekoća, pa uvećano kao i slika
     const bl = Math.max(0.35, Math.max(geo.blurPx * 0.6, 0.5) * vw.k);   // bar jedan piksel fotografije, kao što bi kamera razmazala tanke dlake   // tanka dlaka se na fotografiji razmaže koliko i sve ostalo
