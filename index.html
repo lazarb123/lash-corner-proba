@@ -447,8 +447,8 @@ body.fs-open { overflow: hidden; }
   const cfgB = () => ({ len: { L: STYLES[B.style], R: STYLES[B.style] }, type: B.type, curl: B.curl, wispy: B.style === "wispy", liner: B.style === "liner" });
   // tehnike u salonu: klasika 1:1 i lepeze 2D–12D. d = debljina pojedinačne trepavice u mm
   const TYPES = {
-    classic: { name: "Klasika 1:1", n: 1,  d: 0.15, cover: 0.88, vol: 0,    sp: 0.7,  pull: 0.25, band: 0.35, haze: 0.1 },
-    d2:      { name: "2D",          n: 2,  d: 0.07, cover: 0.92, vol: 0.4,  sp: 0.9,  pull: 0.45, band: 0.55, haze: 0.12 },
+    classic: { name: "Klasika 1:1", n: 1,  d: 0.15, cover: 0.68, vol: 0,    sp: 0.7,  pull: 0.25, band: 0.35, haze: 0.1 },
+    d2:      { name: "2D",          n: 2,  d: 0.07, cover: 0.9,  vol: 0.4,  sp: 0.9,  pull: 0.45, band: 0.55, haze: 0.12 },
     d3:      { name: "3D",          n: 3,  d: 0.07, cover: 0.94, vol: 0.55, sp: 1.0,  pull: 0.55, band: 0.7,  haze: 0.14 },
     d4:      { name: "4D",          n: 4,  d: 0.07, cover: 0.95, vol: 0.7,  sp: 0.95, pull: 0.62, band: 0.8,  haze: 0.15 },
     d8:      { name: "8D",          n: 8,  d: 0.05, cover: 0.97, vol: 0.9,  sp: 0.85, pull: 0.68, band: 0.92, haze: 0.17 },
@@ -671,6 +671,7 @@ body.fs-open { overflow: hidden; }
         const glue = add(root, mul(dir, GLUE_GAP * curl.k * mm));
         x.fillStyle = geo.lashCol[r() < 0.25 ? 1 : 0];
         x.globalAlpha = 1; ribbon(x, sub(root, mul(dir, 0.1 * mm)), root, add(glue, mul(dir, 0.3 * mm)), NAT_D * 1.3 * mm, 1);
+        const cv0 = TYPES[cfg.type].cover; if (Math.floor((k + 1) * cv0) === Math.floor(k * cv0)) continue;   // ravnomerno: ne dobija svaka prirodna trepavica ekstenziju
         const wz = cfg.wispy && ((t > 0.55 && t < 0.72) || t > 0.82 || (t > 0.3 && t < 0.4)) && k % 3 === 0;
         let u = wz ? { n: 4, d: 0.07 } : unitFor(cfg.type, r);
         if (cfg.liner && t > 0.7) u = { n: Math.max(u.n, 1) + 3 + Math.floor(r() * 3), d: Math.max(0.05, u.n > 1 ? u.d : 0.07) };   // krilce: gušće lepeze
@@ -693,7 +694,7 @@ body.fs-open { overflow: hidden; }
         for (let j = 0; j < u.n; j++) {
           const a = (j / (u.n - 1) - 0.5) * open + (r() - 0.5) * (stray ? 0.7 : 0.14);
           const dj = norm(add(mul(dir, Math.cos(a)), mul({ x: -dir.y, y: dir.x }, Math.sin(a))));
-          x.globalAlpha = lerp(0.75, 1, r()); strand(stemEnd, dj, Math.max(0.5, extMm - STEM) * lerp(0.8, 1.04, Math.sqrt(r())), u.d);
+          x.globalAlpha = lerp(u.n <= 4 ? 0.92 : 0.75, 1, r()); strand(stemEnd, dj, Math.max(0.5, extMm - STEM) * lerp(0.8, 1.04, Math.sqrt(r())), u.d);
         }
       }
     }
