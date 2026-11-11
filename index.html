@@ -1,0 +1,1193 @@
+<!doctype html>
+<html lang="sr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+</head>
+<body>
+<title>Lash Corner · Lash proba</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;1,6..96,400&family=Jost:wght@300;400;500;600&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+/* Layout: fotografija levo kao radna površina, panel sa podešavanjima desno; na telefonu panel ide ispod */
+:root {
+  --bg: #f6f2f1;
+  --surface: #ffffff;
+  --ink: #2a2124;
+  --muted: #76696d;
+  --line: #e4dadb;
+  --accent: #7a2e4f;
+  --accent-ink: #ffffff;
+  --chip: #f1e8e9;
+  --stage: #ebe4e3;
+  --f-display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --f-body: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #191517; --surface: #231d20; --ink: #f1e9eb; --muted: #a8999e;
+    --line: #3a3034; --accent: #e58bb0; --accent-ink: #2a1019; --chip: #2e2629; --stage: #110e10;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #191517; --surface: #231d20; --ink: #f1e9eb; --muted: #a8999e;
+  --line: #3a3034; --accent: #e58bb0; --accent-ink: #2a1019; --chip: #2e2629; --stage: #110e10;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body {
+  background: var(--bg); color: var(--ink);
+  font-family: var(--f-body); font-size: 15px; line-height: 1.5;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 20px 40px;
+}
+.wrap { max-width: 1180px; margin: 0 auto; display: grid; gap: 18px; }
+header { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px 20px; }
+h1 { font-family: var(--f-display); font-weight: 700; font-size: clamp(26px, 4vw, 36px); line-height: 1.1; margin: 0; letter-spacing: -0.01em; }
+.sub { color: var(--muted); margin: 0; max-width: 56ch; }
+.grid { display: grid; grid-template-columns: minmax(0, 1fr) 330px; gap: 18px; align-items: start; }
+@media (max-width: 860px) { .grid { grid-template-columns: minmax(0, 1fr); } }
+
+.stage { background: var(--stage); border-radius: 14px; min-height: 380px; display: grid; place-items: center; position: relative; overflow: hidden; outline: 2px dashed transparent; outline-offset: -8px; }
+.stage.loaded { min-height: 0; }
+.stage.drag { outline-color: var(--accent); }
+.stage canvas { display: block; max-width: 100%; height: auto; max-height: 78vh; }
+.empty { display: grid; gap: 14px; justify-items: center; text-align: center; padding: 28px 16px; max-width: 440px; }
+.empty svg { width: min(260px, 100%); height: auto; }
+.empty p { margin: 0; color: var(--muted); }
+.status { position: absolute; left: 12px; bottom: 12px; right: 12px; width: fit-content; font-size: 13px; color: #fff; background: rgba(20, 14, 16, .78); padding: 7px 11px; border-radius: 8px; }
+
+.panel { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 16px; display: grid; gap: 20px; }
+.group { display: grid; gap: 10px; }
+.label { font-size: 11px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin: 0; }
+.btn { font: inherit; font-weight: 600; cursor: pointer; border-radius: 10px; padding: 11px 14px; border: 1px solid var(--accent); background: var(--accent); color: var(--accent-ink); user-select: none; -webkit-user-select: none; }
+.btn.ghost { background: transparent; color: var(--accent); }
+.btn:focus-visible, .chip:focus-visible, .step button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip { font: inherit; font-size: 14px; cursor: pointer; padding: 7px 12px; border-radius: 999px; border: 1px solid var(--line); background: var(--chip); color: var(--ink); }
+.chip[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); font-weight: 600; }
+
+.zrow { display: grid; gap: 4px; }
+.zrow + .zrow { margin-top: 8px; }
+.zrow .zname { font-size: 12.5px; color: var(--muted); }
+.zones { display: grid; grid-template-columns: repeat(var(--nz, 8), minmax(0, 1fr)); gap: 4px; }
+.zones.dense .step output { font-size: 15px; }
+.zones.dense .step small { font-size: 9px; }
+.step { display: grid; justify-items: center; gap: 2px; background: var(--chip); border-radius: 10px; padding: 6px 2px; }
+.step button { font: inherit; font-size: 18px; line-height: 1; width: 100%; padding: 4px 0; border: 0; background: transparent; color: var(--accent); cursor: pointer; border-radius: 6px; }
+.step output { font-family: var(--f-mono); font-variant-numeric: tabular-nums; font-size: 17px; font-weight: 500; }
+.step small { font-size: 10px; color: var(--muted); }
+.zone-ends { display: flex; justify-content: space-between; font-size: 12px; color: var(--muted); }
+.meas { display: grid; grid-template-columns: 1fr auto auto; gap: 3px 14px; font-size: 13.5px; }
+.meas .h { color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: .06em; }
+.meas .v { font-family: var(--f-mono); font-variant-numeric: tabular-nums; text-align: right; }
+.meas .full { grid-column: 2 / 4; text-align: center; }
+.tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.tag { font-size: 12.5px; padding: 3px 9px; border-radius: 6px; background: var(--chip); }
+.suggest { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 10px 12px; border: 1px solid var(--line); border-radius: 10px; font-size: 14px; }
+.suggest .btn { padding: 7px 12px; font-size: 13.5px; }
+.pickrow { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.hold {
+  position: absolute; right: 10px; bottom: 10px; font: inherit; font-weight: 600; font-size: 14px;
+  padding: 10px 14px; border-radius: 999px; border: 0; color: #fff; background: rgba(20, 14, 16, .72); cursor: pointer;
+  user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; touch-action: none;
+}
+.hold:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+.stage canvas { -webkit-touch-callout: none; user-select: none; -webkit-user-select: none; }
+@media (max-width: 860px) {
+  body { padding-block: 12px 32px; font-size: 16px; }
+  .wrap { gap: 12px; }
+  .sub { font-size: 14px; }
+  .desk { display: none; }
+  body.has-photo header { display: none; }
+  body.has-photo .stage { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; box-shadow: 0 6px 16px rgba(0,0,0,.18); }
+  body.has-photo .stage canvas { max-height: 38vh; }
+  .row .chips { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; margin-inline: -14px; padding-inline: 14px; -webkit-overflow-scrolling: touch; }
+  .row .chips::-webkit-scrollbar { display: none; }
+  .row .chip { flex: none; }
+
+  .stage { min-height: 240px; border-radius: 12px; scroll-margin-top: 8px; }
+  .stage canvas { max-height: 60vh; }
+  .panel { padding: 14px; gap: 18px; }
+  .chip { padding: 9px 13px; }
+  .step button { padding: 8px 0; font-size: 20px; }
+  .btn { padding: 13px 14px; }
+}
+.tips { display: grid; gap: 6px; }
+.tips p { margin: 0; font-size: 13.5px; padding: 8px 10px; border-radius: 8px; background: var(--chip); }
+.tips p strong { font-weight: 600; }
+.tips p button { margin-left: 6px; font: inherit; font-size: 12.5px; font-weight: 600; color: var(--accent); background: none; border: 1px solid var(--accent); border-radius: 6px; padding: 2px 8px; cursor: pointer; }
+.profile { margin: 0; display: grid; gap: 4px; }
+.profile canvas { width: 100%; height: auto; border-radius: 10px; background: var(--chip); }
+.profile figcaption { font-size: 12.5px; color: var(--muted); }
+.tabs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; padding: 4px; background: var(--chip); border-radius: 12px; }
+.tab { font: inherit; font-weight: 600; font-size: 14px; padding: 8px 6px; border: 0; border-radius: 9px; background: transparent; color: var(--muted); cursor: pointer; }
+.tab[aria-selected="true"] { background: var(--surface); color: var(--ink); box-shadow: 0 1px 3px rgba(0,0,0,.12); }
+.tab:focus-visible, .linkbtn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.tabpane { display: grid; gap: 16px; }
+.row { display: grid; gap: 8px; min-width: 0; }
+.linkbtn { font: inherit; font-size: 11px; letter-spacing: .04em; text-transform: none; color: var(--accent); background: none; border: 0; padding: 0 0 0 6px; cursor: pointer; text-decoration: underline; }
+.stage.loaded { display: flex; flex-direction: column; align-items: stretch; }
+.stage.loaded canvas { align-self: center; }
+.overlay { display: flex; justify-content: flex-end; flex-wrap: wrap; gap: 6px; padding: 8px; }
+.overlay .hold { position: static; font-size: 13px; padding: 7px 12px; }
+.overlay .hold[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); }
+.stage.editing canvas { touch-action: none; cursor: grab; }
+.stage.fs, body.has-photo .stage.fs {
+  position: fixed; inset: 0; z-index: 50; border-radius: 0; margin: 0; background: #111014; box-shadow: none;
+  display: flex; flex-direction: column; justify-content: center;
+  padding: env(safe-area-inset-top, 0px) env(safe-area-inset-right, 0px) env(safe-area-inset-bottom, 0px) env(safe-area-inset-left, 0px);
+}
+.stage.fs canvas, body.has-photo .stage.fs canvas { width: auto; max-width: 100%; max-height: calc(100dvh - 110px); align-self: center; }
+.stage.fs .edit-hint { color: #fff; text-align: center; }
+.stage.fs .overlay { justify-content: center; }
+body.fs-open { overflow: hidden; }
+.rot-hint { display: none; }
+@media (orientation: portrait) and (max-width: 860px) { .stage.fs .rot-hint { display: block; order: 2; opacity: .8; } }
+.stage.fs #newPhoto { display: none; }
+.edit-hint { order: -1; font-size: 13px; color: var(--ink); padding: 8px 10px 0; }
+.note { font-size: 12.5px; color: var(--muted); margin: 0; }
+.check { display: flex; align-items: center; gap: 8px; font-size: 14px; cursor: pointer; }
+.check input { accent-color: var(--accent); width: 16px; height: 16px; }
+
+/* ===== LASH CORNER — brend: crna, krem/nude, zlato; Bodoni logotip + Jost ===== */
+:root {
+  --bg: #f6f0eb; --surface: #fffdfb; --ink: #151213; --muted: #85776f; --line: #e6dbd2;
+  --accent: #151213; --accent-ink: #f6f0eb; --chip: #f3ebe4; --stage: #e9e0d8;
+  --gold: #b08d57; --gold-soft: #d8c19a; --wine: #7d1c24;
+  --f-display: "Bodoni Moda", "Didot", "Times New Roman", serif;
+  --f-body: "Jost", "Futura", "Segoe UI", system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #0f0d0e; --surface: #181516; --ink: #f4ece5; --muted: #a39389; --line: #2e2826;
+  --accent: #f4ece5; --accent-ink: #151213; --chip: #221d1d; --stage: #0a0909; --gold: #c9a66b; --gold-soft: #6e5a3b; --wine: #b8434d; color-scheme: dark; } }
+:root[data-theme="dark"] {
+  --bg: #0f0d0e; --surface: #181516; --ink: #f4ece5; --muted: #a39389; --line: #2e2826;
+  --accent: #f4ece5; --accent-ink: #151213; --chip: #221d1d; --stage: #0a0909; --gold: #c9a66b; --gold-soft: #6e5a3b; --wine: #b8434d; color-scheme: dark; }
+body { font-family: var(--f-body); font-weight: 400; letter-spacing: .01em; }
+
+/* zaglavlje */
+.brandbar { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-block: 6px 18px; border-bottom: 1px solid var(--line); }
+.logo { display: inline-grid; justify-items: center; line-height: 1; color: var(--ink); text-decoration: none; }
+.logo .w1 { font-family: var(--f-display); font-weight: 400; font-size: clamp(34px, 5vw, 48px); letter-spacing: .08em; }
+.logo .w2 { font-family: var(--f-body); font-weight: 400; font-size: clamp(8px, 1vw, 10px); letter-spacing: 1.05em; margin-right: -1.05em; margin-top: 6px; }
+.brandmeta { text-align: right; display: grid; gap: 2px; }
+.brandmeta .eyebrow { font-size: 10.5px; letter-spacing: .32em; text-transform: uppercase; color: var(--gold); }
+.brandmeta .place { font-size: 12px; color: var(--muted); letter-spacing: .08em; }
+.hero { display: grid; gap: 6px; padding-top: 6px; }
+.hero h1 { font-family: var(--f-display); font-weight: 400; font-size: clamp(28px, 4.4vw, 46px); line-height: 1.05; letter-spacing: -.005em; margin: 0; text-wrap: balance; }
+.hero h1 em { font-style: italic; color: var(--gold); }
+.hero .sub { font-weight: 300; font-size: 15.5px; color: var(--muted); max-width: 52ch; }
+.hairline { display: flex; align-items: center; gap: 10px; color: var(--gold); font-size: 10px; letter-spacing: .3em; text-transform: uppercase; }
+.hairline::before, .hairline::after { content: ""; height: 1px; flex: 1; background: linear-gradient(90deg, transparent, var(--gold-soft), transparent); }
+
+/* površine */
+.stage { border-radius: 4px; background: var(--stage); }
+.panel { border-radius: 4px; border-color: var(--line); padding: 20px; box-shadow: 0 1px 0 var(--line), 0 18px 40px -28px rgba(21,18,19,.35); }
+.label { font-family: var(--f-body); font-weight: 500; font-size: 10.5px; letter-spacing: .26em; color: var(--muted); }
+.label::before { content: ""; display: inline-block; width: 14px; height: 1px; background: var(--gold); vertical-align: middle; margin-right: 8px; }
+
+/* dugmad i izbori */
+.btn { border-radius: 2px; font-weight: 500; letter-spacing: .14em; text-transform: uppercase; font-size: 12.5px; padding: 13px 16px; }
+.btn.ghost { border-color: var(--ink); color: var(--ink); }
+.chip { border-radius: 2px; background: transparent; border-color: var(--line); font-size: 13.5px; letter-spacing: .02em; padding: 8px 13px; }
+.chip:hover { border-color: var(--gold-soft); }
+.chip[aria-pressed="true"] { background: var(--ink); color: var(--accent-ink); border-color: var(--ink); font-weight: 500; box-shadow: inset 0 -2px 0 var(--gold); }
+.tabs { background: transparent; border-bottom: 1px solid var(--line); border-radius: 0; padding: 0; gap: 0; }
+.tab { border-radius: 0; font-weight: 500; font-size: 12px; letter-spacing: .24em; text-transform: uppercase; padding: 12px 6px; }
+.tab[aria-selected="true"] { background: transparent; box-shadow: inset 0 -2px 0 var(--gold); color: var(--ink); }
+.step { background: transparent; border: 1px solid var(--line); border-radius: 2px; }
+.step output { font-family: var(--f-display); font-size: 19px; font-weight: 500; }
+.step button { color: var(--gold); }
+.zone-ends { font-size: 11.5px; letter-spacing: .04em; }
+.linkbtn { color: var(--gold); }
+.tag { border-radius: 2px; background: transparent; border: 1px solid var(--line); font-size: 12px; letter-spacing: .04em; }
+.suggest { border-radius: 2px; border-color: var(--gold-soft); background: color-mix(in srgb, var(--gold) 6%, transparent); }
+.suggest strong { font-family: var(--f-display); font-weight: 500; font-size: 16px; }
+.tips p { border-radius: 2px; background: transparent; border-left: 2px solid var(--gold); }
+.meas .v { font-family: var(--f-display); font-size: 15px; }
+.profile canvas { border-radius: 2px; }
+.check input { accent-color: var(--ink); }
+.hold { border-radius: 2px; letter-spacing: .12em; text-transform: uppercase; font-size: 11.5px !important; font-weight: 500; background: rgba(21,18,19,.82); }
+.overlay .hold[aria-pressed="true"] { background: var(--gold); color: #151213; }
+.empty svg { width: min(220px, 100%); }
+.empty p { font-weight: 300; }
+.empty .monogram { font-family: var(--f-display); font-style: italic; font-size: 22px; color: var(--ink); }
+
+/* podnožje */
+.foot { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 6px 16px; padding-top: 14px; border-top: 1px solid var(--line); font-size: 12px; color: var(--muted); letter-spacing: .06em; }
+.foot .seal { font-family: var(--f-display); font-style: italic; color: var(--gold); letter-spacing: 0; font-size: 14px; }
+@media (max-width: 860px) {
+  .brandmeta .place { display: none; }
+  .hero h1 { font-size: 26px; }
+  body.has-photo .brandbar { padding-block: 0 10px; }
+  body.has-photo .hero { display: none; }
+  .panel { padding: 16px; }
+}
+</style>
+
+<div class="wrap">
+  <div class="brandbar">
+    <a class="logo" href="#" aria-label="Lash Corner"><span class="w1">LASH</span><span class="w2">CORNER</span></a>
+    <div class="brandmeta"><span class="eyebrow">Lash proba</span><span class="place">Beograd · od 2012.</span></div>
+  </div>
+  <header class="hero">
+    <h1>Vaš novi pogled, <em>pre prvog dodira.</em></h1>
+    <p class="sub">Fotografišite klijentkinju i zajedno izaberite stil, tehniku i uvijenost pre tretmana. Fotografija ostaje na vašem uređaju.</p>
+  </header>
+
+  <div class="grid">
+    <div class="stage" id="stage">
+      <div class="empty" id="empty">
+        <svg viewBox="0 0 260 120" aria-hidden="true">
+          <path d="M20 78 Q130 10 240 78 Q130 112 20 78Z" fill="none" stroke="var(--muted)" stroke-width="2" opacity=".5"/>
+          <circle cx="130" cy="72" r="24" fill="var(--muted)" opacity=".25"/>
+          <g stroke="var(--ink)" stroke-linecap="round" fill="none" opacity=".75">
+            <path d="M64 52 q-3 -12 0 -21"/><path d="M82 45 q-1 -13 3 -23"/><path d="M100 40 q0 -14 5 -24"/>
+            <path d="M118 37 q2 -14 8 -24"/><path d="M136 36 q4 -14 11 -23"/><path d="M154 38 q6 -13 14 -21"/><path d="M172 42 q8 -12 17 -19"/>
+            <path d="M190 49 q9 -10 19 -15"/><path d="M206 57 q10 -8 20 -11"/><path d="M220 66 q10 -6 19 -7"/>
+          </g>
+        </svg>
+        <span class="monogram">Isprobajte set</span>
+        <div class="pickrow" style="width:100%">
+          <button class="btn" type="button" data-act="shoot">Slikaj se</button>
+          <button class="btn ghost" type="button" data-act="pick">Izaberi sliku</button>
+        </div>
+        <p>Slikaj se ili izaberi sliku iz galerije.<span class="desk"> Sa nekog sajta: desni klik na sliku → <strong>Kopiraj sliku</strong>, pa ovde <strong>Ctrl+V</strong>.</span> Najbolje radi slika spreda, oči otvorene, dobro svetlo.</p>
+      </div>
+      <canvas id="cv" hidden></canvas>
+      <div class="overlay" id="overlay" hidden>
+        <button class="hold" id="newPhoto" type="button">Nova slika</button>
+        <button class="hold" id="editBtn" type="button" aria-pressed="false">Podesi oči</button>
+        <button class="hold" id="fsBtn" type="button" aria-pressed="false">Ceo ekran</button>
+        <button class="hold" id="before" type="button" aria-pressed="false">Prikaži PRE</button>
+      </div>
+      <div class="status" id="status" hidden></div>
+      <div class="edit-hint rot-hint" id="rotHint">Okreni telefon položeno za veći prikaz.</div>
+      <div class="edit-hint" id="editHint" hidden>Prevuci tačke na liniju gde rastu trepavice. Kad završiš, pritisni Gotovo.</div>
+    </div>
+
+    <aside class="panel">
+      <input type="file" id="file" accept="image/*" hidden>
+      <input type="file" id="cam" accept="image/*" capture="user" hidden>
+      <div class="group" id="pickGroup" hidden>
+        <div class="pickrow">
+          <button class="btn" id="shoot" type="button">Slikaj se</button>
+          <button class="btn ghost" id="pick" type="button">Izaberi sliku</button>
+        </div>
+      </div>
+
+      <div class="tabs" role="tablist">
+        <button class="tab" role="tab" type="button" data-tab="set" aria-selected="true">Set</button>
+        <button class="tab" role="tab" type="button" data-tab="oci" aria-selected="false">Oči</button>
+        <button class="tab" role="tab" type="button" data-tab="prikaz" aria-selected="false">Prikaz</button>
+      </div>
+
+      <div class="tabpane" data-pane="set">
+        <div class="row"><p class="label">Stil</p><div class="chips" id="styles">
+          <button class="chip" type="button" data-v="natural" aria-pressed="false">Natural</button>
+          <button class="chip" type="button" data-v="cat" aria-pressed="true">Cat eye</button>
+          <button class="chip" type="button" data-v="doll" aria-pressed="false">Doll eye</button>
+          <button class="chip" type="button" data-v="squirrel" aria-pressed="false">Squirrel</button>
+          <button class="chip" type="button" data-v="wispy" aria-pressed="false">Wispy (Kim K)</button>
+          <button class="chip" type="button" data-v="liner" aria-pressed="false">Eyeliner efekat</button>
+        </div></div>
+        <div class="row"><p class="label">Tehnika</p><div class="chips" id="types">
+          <button class="chip" type="button" data-v="classic" aria-pressed="true">Klasična 1D</button>
+          <button class="chip" type="button" data-v="hybrid" aria-pressed="false">Hybrid</button>
+          <button class="chip" type="button" data-v="light" aria-pressed="false">Lagani volumen 2–3D</button>
+          <button class="chip" type="button" data-v="medium" aria-pressed="false">Medium volumen 2–5D</button>
+          <button class="chip" type="button" data-v="mega" aria-pressed="false">Mega volumen 6+D</button>
+        </div></div>
+        <div class="row">
+          <p class="label">Uvijenost <button class="linkbtn" id="curlToggle" type="button" aria-expanded="false">pogled sa strane</button></p>
+          <div class="chips" id="curls">
+          <button class="chip" type="button" data-v="C" aria-pressed="false">C</button>
+          <button class="chip" type="button" data-v="CC" aria-pressed="true">CC</button>
+          <button class="chip" type="button" data-v="D" aria-pressed="false">D</button>
+          <button class="chip" type="button" data-v="L" aria-pressed="false">Extreme (L)</button>
+        </div>
+          <figure class="profile" id="curlFig" hidden>
+            <canvas id="curlCv" width="600" height="300" aria-label="Pogled sa strane na uvijenost trepavice"></canvas>
+            <figcaption id="curlCap">Pogled sa strane</figcaption>
+          </figure>
+        </div>
+        <div class="row">
+          <p class="label">Dužine (mm)</p>
+          <div class="chips" id="nzones" aria-label="Broj zona">
+          <button class="chip" type="button" data-v="5" aria-pressed="false">5 zona</button>
+          <button class="chip" type="button" data-v="6" aria-pressed="false">6</button>
+          <button class="chip" type="button" data-v="7" aria-pressed="false">7</button>
+          <button class="chip" type="button" data-v="8" aria-pressed="true">8</button>
+        </div>
+          <div id="zoneRows"></div>
+          <div class="zone-ends"><span>← unutrašnji ugao</span><span>spoljni ugao →</span></div>
+          <label class="check"><input type="checkbox" id="split"> Posebne dužine za svako oko</label>
+        </div>
+      </div>
+
+      <div class="tabpane" data-pane="oci" hidden>
+        <div class="group" id="analysis" hidden>
+          <div class="meas" id="meas"></div>
+          <div class="tags" id="tags"></div>
+          <div class="suggest" id="suggest"></div>
+          <div class="tips" id="tips"></div>
+          <p class="note">Mere su procena iz fotografije (prema veličini dužice), tačne na oko pola milimetra.</p>
+        </div>
+        <p class="note" id="noAnalysis">Ubaci fotografiju lica spreda, pa ovde vidiš mere očiju i predlog stila.</p>
+      </div>
+
+      <div class="tabpane" data-pane="prikaz" hidden>
+        <div class="row"><p class="label">Kadar</p><div class="chips" id="views">
+          <button class="chip" type="button" data-v="eyes" aria-pressed="true">Oči</button>
+          <button class="chip" type="button" data-v="face" aria-pressed="false">Celo lice</button>
+        </div></div>
+        <div class="row">
+          <p class="label">Linije na slici</p>
+          <label class="check"><input type="checkbox" id="showZones" checked> Lash mapa (zone i dužine)</label>
+          <label class="check"><input type="checkbox" id="showFlick"> Pravac spoljnog ugla</label>
+          <label class="check"><input type="checkbox" id="showBrow"> Brow mapping</label>
+          <label class="check"><input type="checkbox" id="showMeas"> Mere (odstojanja)</label>
+        </div>
+        <div class="row">
+          <p class="label">Uporedi</p>
+          <label class="check"><input type="checkbox" id="compare"> Druga varijanta (B) ispod</label>
+          <div class="group" id="bBox" hidden>
+          <div class="chips" id="bStyles">
+            <button class="chip" type="button" data-v="natural" aria-pressed="true">Natural</button>
+            <button class="chip" type="button" data-v="cat" aria-pressed="false">Cat eye</button>
+            <button class="chip" type="button" data-v="doll" aria-pressed="false">Doll eye</button>
+            <button class="chip" type="button" data-v="squirrel" aria-pressed="false">Squirrel</button>
+          </div>
+          <div class="chips" id="bTypes">
+            <button class="chip" type="button" data-v="classic" aria-pressed="false">Klasična 1D</button>
+            <button class="chip" type="button" data-v="hybrid" aria-pressed="false">Hybrid</button>
+            <button class="chip" type="button" data-v="light" aria-pressed="false">Lagani 2–3D</button>
+            <button class="chip" type="button" data-v="medium" aria-pressed="true">Medium 2–5D</button>
+            <button class="chip" type="button" data-v="mega" aria-pressed="false">Mega 6+D</button>
+          </div>
+          <div class="chips" id="bCurls">
+            <button class="chip" type="button" data-v="C" aria-pressed="false">C</button>
+            <button class="chip" type="button" data-v="CC" aria-pressed="false">CC</button>
+            <button class="chip" type="button" data-v="D" aria-pressed="true">D</button>
+            <button class="chip" type="button" data-v="L" aria-pressed="false">Extreme (L)</button>
+          </div>
+          <p class="note">Gore je varijanta A (kartica Set), dole varijanta B.</p>
+        </div>
+        </div>
+        <p class="note">Okvirna simulacija za razgovor sa klijentkinjom, ne tačan rezultat.</p>
+      </div>
+    </aside>
+  </div>
+</div>
+
+<div class="wrap"><footer class="foot"><span class="seal">Lash Corner</span><span>Ruski volumen · Eyeliner efekat · Klasika</span><span>Okvirna simulacija za konsultaciju</span></footer></div>
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh@0.4.1633559619/face_mesh.js" crossorigin="anonymous"></script>
+<script>
+(() => {
+  const CDN = "https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh@0.4.1633559619/";
+  const $ = (id) => document.getElementById(id);
+  const cv = $("cv"), ctx = cv.getContext("2d"), stage = $("stage"), statusEl = $("status");
+  let img = null, lm = null, geo = null, ready = null, showBefore = false, layer = null, layerB = null;
+
+  // stilovi mapirani na 8 zona (od unutrašnjeg ka spoljnom uglu); za manje zona se preračunavaju
+  // prema lash mapping vodičima: natural = vrh na sredini (zenica); cat = najduže u pretposlednjoj zoni;
+  // doll = dugo i ujednačeno preko cele dužice, kratki uglovi; squirrel = vrh na ~70% pa naglo kraće; wispy = baza + špicevi 2–3 mm duži
+  const STYLE_BASE = {
+    natural:  [7, 8, 9, 10, 10, 10, 9, 8],
+    cat:      [7, 8, 9, 10, 11, 12, 13, 12],
+    doll:     [8, 10, 11, 12, 12, 12, 11, 9],
+    squirrel: [7, 8, 9, 10, 11, 13, 11, 9],
+    wispy:    [8, 9, 9, 10, 10, 10, 11, 10],
+    liner:    [6, 7, 8, 8, 9, 10, 11, 12],
+  };
+  let NZ = 8;
+  const resampleArr = (a, n) => Array.from({ length: n }, (_, i) => { const z = n === 1 ? 0 : i * (a.length - 1) / (n - 1), j = Math.floor(z); const v0 = a[j], v1 = a[Math.min(a.length - 1, j + 1)]; return Math.round(v0 + (v1 - v0) * (z - j)); });
+  const styleArr = (name) => resampleArr(STYLE_BASE[name], NZ);
+  const STYLES = new Proxy({}, { get: (_, k) => styleArr(k), ownKeys: () => Object.keys(STYLE_BASE), getOwnPropertyDescriptor: () => ({ enumerable: true, configurable: true }) });
+  const st = { len: { L: styleArr("cat"), R: styleArr("cat") }, split: false, type: "classic", curl: "CC" };
+  const B = { style: "natural", type: "medium", curl: "D", compare: false };
+  const isWispy = (len) => ["L", "R"].every((e) => styleArr("wispy").every((v, i) => v === len[e][i]));
+  const isStyle = (name, len) => ["L", "R"].every((e) => styleArr(name).every((v, i) => v === len[e][i]));
+  const cfgA = () => ({ len: st.len, type: st.type, curl: st.curl, wispy: isWispy(st.len), liner: isStyle("liner", st.len) });
+  const cfgB = () => ({ len: { L: STYLES[B.style], R: STYLES[B.style] }, type: B.type, curl: B.curl, wispy: B.style === "wispy", liner: B.style === "liner" });
+  const TYPE_NAMES = { classic: "Klasična 1D", hybrid: "Hybrid", light: "Lagani 2–3D", medium: "Medium 2–5D", mega: "Mega 6+D" };
+
+  // MediaPipe tačke (R = desno oko osobe = levo na slici)
+  const IDX = {
+    R: { lid: [33, 246, 161, 160, 159, 158, 157, 173, 133], outer: 33, inner: 133, top: 159, bottom: 145, iris: 468, ring: [469, 470, 471, 472],
+         browUp: [70, 63, 105, 66, 107], browLo: [46, 53, 52, 65, 55], ala: 64 },
+    L: { lid: [263, 466, 388, 387, 386, 385, 384, 398, 362], outer: 263, inner: 362, top: 386, bottom: 374, iris: 473, ring: [474, 475, 476, 477],
+         browUp: [300, 293, 334, 296, 336], browLo: [276, 283, 282, 295, 285], ala: 294 },
+  };
+
+  const add = (a, b) => ({ x: a.x + b.x, y: a.y + b.y }), sub = (a, b) => ({ x: a.x - b.x, y: a.y - b.y });
+  const mul = (a, k) => ({ x: a.x * k, y: a.y * k }), len = (a) => Math.hypot(a.x, a.y);
+  const norm = (a) => { const l = len(a) || 1; return { x: a.x / l, y: a.y / l }; }, dot = (a, b) => a.x * b.x + a.y * b.y;
+  const lerp = (a, b, t) => a + (b - a) * t;
+  const rng = (seed) => () => { seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; };
+  const setStatus = (t) => { statusEl.textContent = t || ""; statusEl.hidden = !t; };
+  let hintT; const hint = (t) => { setStatus(t); clearTimeout(hintT); hintT = setTimeout(() => { if (statusEl.textContent === t) setStatus(""); }, 7000); };
+
+  function catmull(pts, steps = 12) {
+    const out = [];
+    for (let i = 0; i < pts.length - 1; i++) {
+      const p0 = pts[i - 1] || pts[i], p1 = pts[i], p2 = pts[i + 1], p3 = pts[i + 2] || p2;
+      for (let s = 0; s < steps; s++) {
+        const t = s / steps, t2 = t * t, t3 = t2 * t;
+        out.push({ x: 0.5 * (2 * p1.x + (-p0.x + p2.x) * t + (2 * p0.x - 5 * p1.x + 4 * p2.x - p3.x) * t2 + (-p0.x + 3 * p1.x - 3 * p2.x + p3.x) * t3),
+                   y: 0.5 * (2 * p1.y + (-p0.y + p2.y) * t + (2 * p0.y - 5 * p1.y + 4 * p2.y - p3.y) * t2 + (-p0.y + 3 * p1.y - 3 * p2.y + p3.y) * t3) });
+      }
+    }
+    out.push(pts[pts.length - 1]); return out;
+  }
+  function resample(poly, n) {
+    const cum = [0]; for (let i = 1; i < poly.length; i++) cum.push(cum[i - 1] + len(sub(poly[i], poly[i - 1])));
+    const T = cum[cum.length - 1], out = []; let j = 1;
+    for (let k = 0; k < n; k++) { const d = T * k / (n - 1); while (j < poly.length - 1 && cum[j] < d) j++; const t = (d - cum[j - 1]) / ((cum[j] - cum[j - 1]) || 1); out.push(add(poly[j - 1], mul(sub(poly[j], poly[j - 1]), Math.min(1, t)))); }
+    return out;
+  }
+  function normalAt(pts, i, up) {
+    const a = pts[Math.max(0, i - 1)], b = pts[Math.min(pts.length - 1, i + 1)], tan = norm(sub(b, a));
+    let n = { x: tan.y, y: -tan.x }; if (dot(n, up) < 0) n = mul(n, -1); return n;
+  }
+
+  function hitPoly(a, d, poly) {
+    let best = null;
+    for (let i = 0; i < poly.length - 1; i++) {
+      const p = poly[i], e = sub(poly[i + 1], p), den = d.x * e.y - d.y * e.x; if (Math.abs(den) < 1e-9) continue;
+      const w = sub(p, a), t = (w.x * e.y - w.y * e.x) / den, u = (w.x * d.y - w.y * d.x) / den;
+      if (u >= 0 && u <= 1 && t > 0 && (!best || t < best.t)) best = { t, pt: add(a, mul(d, t)) };
+    }
+    return best && best.pt;
+  }
+  // koliko je fotografija oštra oko očiju: trepavice se omekšaju isto toliko
+  function sharpness(side) {
+    try {
+      const pts = [...side.R.lid, ...side.L.lid];
+      const x0 = Math.max(0, Math.floor(Math.min(...pts.map((p) => p.x)))), y0 = Math.max(0, Math.floor(Math.min(...pts.map((p) => p.y)) - side.R.mmPx * 3));
+      const x1 = Math.min(img.width, Math.ceil(Math.max(...pts.map((p) => p.x)))), y1 = Math.min(img.height, Math.ceil(Math.max(...pts.map((p) => p.y)) + side.R.mmPx * 3));
+      const w = x1 - x0, h = y1 - y0; if (w < 8 || h < 8) return 0.6;
+      const d = img.getContext("2d").getImageData(x0, y0, w, h).data, gr = new Float32Array(w * h);
+      for (let i = 0; i < w * h; i++) gr[i] = d[i * 4] * 0.3 + d[i * 4 + 1] * 0.59 + d[i * 4 + 2] * 0.11;
+      let lap = 0, grad = 0;
+      for (let y = 1; y < h - 1; y++) for (let x = 1; x < w - 1; x++) {
+        const i = y * w + x, c = gr[i];
+        lap += Math.abs(4 * c - gr[i - 1] - gr[i + 1] - gr[i - w] - gr[i + w]);
+        grad += Math.abs(gr[i + 1] - c) + Math.abs(gr[i + w] - c);
+      }
+      const ratio = lap / (grad || 1);
+      return Math.min(1.6, Math.max(0.25, 0.25 + (1 - ratio) * 0.9));
+    } catch (e) { return 0.6; }
+  }
+  // linija kapka iz modela često sedne na nabor kapka; pomeri svaku tačku na najtamniju usku liniju u blizini (pravu liniju trepavica)
+  function snapLid(lid, rr, up) {
+    // linija se pomera samo kao celina (pomak + blagi nagib), bez talasanja.
+    // Prava linija trepavica: tamno na liniji, a odmah iznad svetla koža (kod ivice dužice je iznad tamno).
+    const n = lid.length, nrm = lid.map((_, i) => { const a = lid[Math.max(0, i - 8)], b = lid[Math.min(n - 1, i + 8)], t = norm(sub(b, a)); let v = { x: t.y, y: -t.x }; return dot(v, up) < 0 ? mul(v, -1) : v; });
+    const idx = []; for (let i = Math.round(n * 0.12); i <= Math.round(n * 0.88); i += 2) idx.push(i);
+    let best = { sc: 1e9, o0: 0, o1: 0 };
+    // nabor kapka je ~0,5 dužice iznad linije trepavica: ostaje van pretrage
+    for (let o0 = -0.15; o0 <= 0.3; o0 += 0.03) for (let o1 = -0.3; o1 <= 0.301; o1 += 0.1) {
+      let sc = 0;
+      for (const i of idx) {
+        const u = i / (n - 1), off = (o0 + o1 * (u - 0.5)) * rr, p = add(lid[i], mul(nrm[i], -off));
+        const nn = nrm[i], at = Math.min(lumAt(p.x, p.y), lumAt(p.x + nn.x * rr * 0.06, p.y + nn.y * rr * 0.06));
+        const above = lumAt(p.x + nn.x * rr * 0.32, p.y + nn.y * rr * 0.32);
+        sc += at - above;
+      }
+      sc = sc / idx.length + 6 * Math.abs(o0) + 3 * Math.abs(o1);
+      if (sc < best.sc) best = { sc, o0, o1 };
+    }
+
+    return lid.map((p, i) => add(p, mul(nrm[i], -(best.o0 + best.o1 * (i / (n - 1) - 0.5)) * rr)));
+  }
+  // najtamnija boja oko očiju na ovoj fotografiji: trepavice ne smeju biti crnje od najcrnjeg što je telefon snimio
+  function darkestColor(side) {
+    try {
+      const px = [];
+      for (const s of ["R", "L"]) { const g = side[s]; for (const p of g.lid) for (const o of [-0.3, 0, 0.3]) { const q = add(p, mul({ x: 0, y: 1 }, o * g.irisR)); const xi = Math.round(q.x), yi = Math.round(q.y); if (xi < 0 || yi < 0 || xi >= img.width || yi >= img.height) continue; const i = (yi * img.width + xi) * 4; if (!lumData) lumAt(0, 0); px.push([lumData[i] * 0.3 + lumData[i + 1] * 0.59 + lumData[i + 2] * 0.11, lumData[i], lumData[i + 1], lumData[i + 2]]); } }
+      px.sort((a, b) => a[0] - b[0]); const k = px.slice(0, Math.max(3, Math.round(px.length * 0.03)));
+      const m = [1, 2, 3].map((j) => k.reduce((a, e) => a + e[j], 0) / k.length);
+      const dark = [10, 9, 11], light = [24, 22, 24];   // ekstenzije su crne (kao na njenim radovima), bez obzira na boju fotografije
+      return [`rgb(${dark.join(",")})`, `rgb(${light.join(",")})`];
+    } catch (e) { return ["#0a0807", "#17120f"]; }
+  }
+  function computeGeo() {
+    const P = (i) => ({ x: lm[i].x * img.width, y: lm[i].y * img.height });
+    const xAxis = norm(sub(P(IDX.L.outer), P(IDX.R.outer)));
+    let up = { x: xAxis.y, y: -xAxis.x };
+    if (dot(up, sub(P(10), P(152))) < 0) up = mul(up, -1);   // gore = ka čelu, i kad je slika u ogledalu (prednja kamera)
+    const ipd = len(sub(P(IDX.L.iris), P(IDX.R.iris))), side = {};
+    for (const s of ["R", "L"]) {
+      const S = IDX[s], iris = P(S.iris);
+      const irisR = S.ring.map(P).reduce((m, p) => m + len(sub(p, iris)), 0) / 4;
+      // kapak od unutrašnjeg ka spoljnom uglu
+      const inner = P(S.inner), outer = P(S.outer), mmPx = (irisR * 2) / 11.7;
+      const width = len(sub(outer, inner)) / mmPx, open = Math.abs(dot(sub(P(S.top), P(S.bottom)), up)) / mmPx;
+      const tilt = Math.atan2(dot(sub(outer, inner), up), Math.abs(dot(sub(outer, inner), xAxis))) * 180 / Math.PI;
+      const outward = norm(sub(outer, inner));
+      // obrva: srednja linija i brow mapping (od krila nosa: kroz unutrašnji ugao gore, kroz spoljnu ivicu dužice, kroz spoljni ugao oka)
+      const browC = catmull(S.browUp.map((i, j) => { const a = P(i), b = P(S.browLo[j]); return { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 }; }));
+      const ext = [add(browC[0], mul(norm(sub(browC[0], browC[1])), ipd * 0.3)), ...browC, add(browC[browC.length - 1], mul(norm(sub(browC[browC.length - 1], browC[browC.length - 2])), ipd * 0.3))];
+      const ala = P(S.ala), irisOuter = add(iris, mul(outward, irisR));
+      const rays = { start: up, arch: norm(sub(irisOuter, ala)), end: norm(sub(outer, ala)) }, hits = {};
+      for (const k in rays) hits[k] = hitPoly(ala, rays[k], ext) || browC[k === "start" ? browC.length - 1 : 0];
+      const archH = dot(sub(hits.arch, outer), up) / mmPx;
+      const lid0 = snapLid(resample(catmull(S.lid.map(P)).reverse(), 80), irisR, up);
+      const tail = norm(sub(lid0[lid0.length - 1], lid0[lid0.length - 4])), lidExt = [1, 2, 3].map((j) => add(lid0[lid0.length - 1], mul(tail, mmPx * 0.35 * j)));
+      const lidAuto = resample([...lid0, ...lidExt], 84);
+      side[s] = { lid: lidAuto, lidAuto, adj: [{ x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 0 }], irisR, mmPx, outward, inner, outer, top: P(S.top), bottom: P(S.bottom), width, open, tilt,
+                  brow: browC, ala, hits, archH, face: [P(10), P(152), P(234), P(454)] };
+    }
+    const mmAvg = (side.R.mmPx + side.L.mmPx) / 2;
+    const gap = len(sub(side.L.inner, side.R.inner)) / mmAvg;
+    return { up, xAxis, ipd, side, gap, blurPx: sharpness(side), lashCol: darkestColor(side) };
+  }
+
+  // položaj t: 0 = unutrašnji ugao, 1 = spoljni. Uz sam unutrašnji ugao se ne lepi.
+  const START = 0.02, END = 1;   // od samog unutrašnjeg do samog spoljnog ugla
+  function lengthAt(t, arr) {
+    const n = arr.length, u = (t - START) / (END - START), z = Math.min(n - 1, Math.max(0, u * n - 0.5)), i = Math.floor(z), f = z - i;
+    return lerp(arr[i], arr[Math.min(n - 1, i + 1)], f);
+  }
+
+  // ===== FIZIČKI MODEL, SVE U MILIMETRIMA (mm -> pikseli preko veličine dužice, ~11,7 mm) =====
+  // • Na gornjem kapku je 90–150 prirodnih trepavica, oko 4 po milimetru kapka.
+  // • Na SVAKU prirodnu trepavicu ide jedna ekstenzija (klasika) ili jedna lepeza (volumen) — nikad na kožu.
+  // • Lepi se oko 0,7 mm od kapka; ispod toga se vidi samo prirodna trepavica.
+  // • Lepeza je snop tanjih trepavica: baza zatvorena ~1 mm (deo umočen u lepak), pa se otvara.
+  // • Debljine: klasika 0,12 mm (0,15 samo za jake prirodne); lagani volumen 0,07; medium 0,05; mega 0,03 (4 × 0,07 ≈ težina jedne 0,15).
+  const NAT_PER_MM = 4.2, NAT_D = 0.11, GLUE_GAP = 0.7, STEM = 0.6;
+  const unitFor = (type, r) => {
+    switch (type) {
+      case "classic": return { n: 1, d: 0.12 };
+      case "hybrid":  return r() < 0.5 ? { n: 1, d: 0.12 } : { n: 2 + Math.floor(r() * 2), d: 0.07 };
+      case "light":   return { n: 2 + Math.floor(r() * 2), d: 0.07 };
+      case "medium":  return { n: 3 + Math.floor(r() * 3), d: 0.05 };
+      default:        return { n: 7 + Math.floor(r() * 4), d: 0.03 };   // mega
+    }
+  };
+  const COVER = { classic: 0.88, hybrid: 0.92, light: 0.94, medium: 0.96, mega: 0.98 };   // udeo prirodnih trepavica koje dobiju ekstenziju
+
+  // jedna trepavica kao ispunjena traka koja se sužava (tačna debljina i ispod piksela, bez "tačkica" na spojevima)
+  function ribbon(x, p0, cp, p2, w, taperFrom) {
+    const N = 14, L = [], R = [];
+    for (let q = 0; q <= N; q++) {
+      const u = q / N;
+      const p = add(add(mul(p0, (1 - u) ** 2), mul(cp, 2 * u * (1 - u))), mul(p2, u * u));
+      const d = norm(add(mul(sub(cp, p0), 2 * (1 - u)), mul(sub(p2, cp), 2 * u)));
+      const ww = (w / 2) * (u < taperFrom ? 1 : lerp(1, 0.08, (u - taperFrom) / (1 - taperFrom)));
+      const nn = { x: -d.y, y: d.x };
+      L.push(add(p, mul(nn, ww))); R.push(sub(p, mul(nn, ww)));
+    }
+    x.beginPath(); L.forEach((p, i) => i ? x.lineTo(p.x, p.y) : x.moveTo(p.x, p.y));
+    for (let i = R.length - 1; i >= 0; i--) x.lineTo(R[i].x, R[i].y);
+    x.closePath(); x.fill();
+  }
+
+  function renderLashes(cfg) {
+    // crta se u rezoluciji prikaza, da tanke trepavice ne budu uvećani pikseli
+    const c = document.createElement("canvas"); c.width = cv.width; c.height = vw.H; const x = c.getContext("2d");
+    x.setTransform(vw.k, 0, 0, vw.k, -vw.x0 * vw.k, -vw.y0 * vw.k);
+    // uvijenost: c = koliko je vrh okrenut nagore (C ~60°, D ~70°), k = vidljiva dužina spreda, ang = nagib ka spolja, kink = L: ravna baza pa prelom
+    const curl = { C: { c: 0.25, k: 0.52, ang: 1.25, kink: 0 }, CC: { c: 0.48, k: 0.56, ang: 1.05, kink: 0 }, D: { c: 0.7, k: 0.6, ang: 0.9, kink: 0 }, L: { c: 0.88, k: 0.62, ang: 0.7, kink: 0.45 } }[cfg.curl];   // k: spreda se uvijena trepavica vidi skraćeno (~60% stvarne dužine)
+    const curve = (from, dir, Lpx) => {
+      const dTip = norm(add(mul(dir, 1 - curl.c), mul(geo.up, curl.c)));
+      if (curl.kink) { const knee = add(from, mul(dir, Lpx * curl.kink)); return [add(knee, mul(dir, Lpx * 0.05)), add(knee, mul(dTip, Lpx * (1 - curl.kink)))]; }
+      const cp = add(from, mul(dir, Lpx * lerp(0.6, 0.42, curl.c)));
+      return [cp, add(cp, mul(dTip, Lpx * lerp(0.45, 0.62, curl.c)))];
+    };
+    for (const s of ["R", "L"]) {
+      const g = geo.side[s], r = rng(s === "R" ? 21 : 34), pts = g.lid, mm = g.mmPx, lens = cfg.len[s];
+      let lidLen = 0; for (let i = 1; i < pts.length; i++) lidLen += len(sub(pts[i], pts[i - 1]));
+      const nat = Math.round((lidLen / mm) * NAT_PER_MM), lidMm = lidLen / mm, cph = r() * 6.28;
+      const vol = { classic: 0, hybrid: 0.4, light: 0.55, medium: 0.8, mega: 1 }[cfg.type];
+      const clump = (t) => Math.sin(6.283 * (t * lidMm) / 1.3 + cph) * 0.5 + Math.sin(6.283 * (t * lidMm) / 0.55 + cph * 2) * 0.25;
+      // položaj na kapku -> tačka, normala i pravac trepavice (počešljano)
+      const geomAt = (t) => {
+        const i = Math.round(Math.min(1, Math.max(0, t)) * (pts.length - 1));
+        const a6 = pts[Math.max(0, i - 9)], b6 = pts[Math.min(pts.length - 1, i + 9)], tg = norm(sub(b6, a6));
+        let n0 = { x: tg.y, y: -tg.x }; if (dot(n0, geo.up) < 0) n0 = mul(n0, -1);
+        const bb = (lerp(-0.05, 0.62, t) + Math.max(0, t - 0.55) * (cfg.liner ? 2.4 : 1.4)) * curl.ang;   // spoljni deo ide ka spolja, kod eyeliner efekta skoro vodoravno
+        return { p: pts[i], n0, dir: norm(add(mul(n0, Math.cos(bb)), mul(g.outward, Math.sin(bb)))) };
+      };
+      // šiljci: susedne trepavice se pri vrhu spajaju u šiljak (kod volumena jače); razmak šiljaka u mm
+      const SP = { classic: 0.7, hybrid: 0.9, light: 1.0, medium: 0.9, mega: 0.8 }[cfg.type];
+      const PULL = { classic: 0.25, hybrid: 0.5, light: 0.55, medium: 0.65, mega: 0.72 }[cfg.type];
+      const hash = (n) => { const v = Math.sin(n * 12.9898 + (s === "R" ? 3.1 : 7.7)) * 43758.5453; return v - Math.floor(v); };
+      const spikeTip = (t, extOf) => {
+        const idx = Math.round((t * lidMm) / SP + (hash(Math.floor(t * lidMm / SP)) - 0.5) * 0.9);   // nepravilan razmak šiljaka
+        const tc = Math.min(END, Math.max(START, (idx * SP) / lidMm)), G = geomAt(tc);
+        const rr = hash(idx), sideTilt = (hash(idx + 99) - 0.5) * 0.5;
+        const d = norm(add(mul(G.dir, Math.cos(sideTilt)), mul({ x: -G.dir.y, y: G.dir.x }, Math.sin(sideTilt))));
+        const base = add(G.p, mul(G.dir, GLUE_GAP * curl.k * mm));
+        return curve(base, d, extOf(tc) * lerp(0.78, 1.12, rr) * mm)[1];
+      };
+      for (let k = 0; k < nat; k++) {
+        const t = START + (END - START) * Math.min(1, Math.max(0, (k + (r() - 0.5) * 0.2) / (nat - 1)));
+        const G = geomAt(t), n0 = G.n0;
+        const ramp = Math.min(1, (t - START) / 0.14);                                  // unutrašnji ugao: kraće
+        const bj = (r() - 0.5) * 0.1, dir = norm(add(mul(G.dir, Math.cos(bj)), mul({ x: -G.dir.y, y: G.dir.x }, Math.sin(bj))));
+        const root = sub(G.p, mul(n0, mm * lerp(-0.03, 0.08, r())));
+        const glue = add(root, mul(dir, GLUE_GAP * curl.k * mm));
+        x.fillStyle = geo.lashCol[r() < 0.25 ? 1 : 0];
+        x.globalAlpha = 1; ribbon(x, sub(root, mul(dir, 0.1 * mm)), root, add(glue, mul(dir, 0.3 * mm)), NAT_D * 1.3 * mm, 1);
+        const wz = cfg.wispy && ((t > 0.55 && t < 0.72) || t > 0.82 || (t > 0.3 && t < 0.4)) && k % 3 === 0;
+        let u = wz ? { n: 4, d: 0.07 } : unitFor(cfg.type, r);
+        if (cfg.liner && t > 0.7) u = { n: Math.max(u.n, 1) + 3 + Math.floor(r() * 3), d: Math.max(0.05, u.n > 1 ? u.d : 0.07) };   // krilce: gušće lepeze
+        const linerK = (tt) => cfg.liner ? lerp(0.62, 1.15, Math.max(0, (tt - 0.5) / 0.5) ** 1.5) : 1;
+        const extOf = (tt) => (lengthAt(tt, lens) + (wz ? 3 : 0)) * curl.k * linerK(tt) * lerp(0.72, 1, Math.min(1, (tt - START) / 0.14));
+        const extMm = extOf(t) * lerp(0.9, 1.06, r());
+        const stray = r() < 0.26;                                                     // zalutale dlačice: paperjast obod
+        const sTip = spikeTip(t, extOf), pull = (wz ? 0 : PULL) * (stray ? 0.15 : lerp(0.45, 1.15, r())) * ramp;
+        const strand = (from, d, Lmm, w) => {
+          let [cp, tip] = curve(from, d, Lmm * mm);
+          tip = add(mul(tip, 1 - pull), mul(sTip, pull));                         // vrh ka šiljku
+          cp = add(mul(cp, 1 - pull * 0.35), mul(add(from, mul(sub(sTip, from), 0.5)), pull * 0.35));
+          ribbon(x, from, cp, tip, w * mm, 0.3);                                      // vrh se sužava ranije: fin, paperjast
+        };
+        if (u.n === 1) { x.globalAlpha = 1; strand(glue, dir, extMm, u.d); continue; }
+        // lepeza: zatvorena baza (snop), pa se otvara
+        const stemEnd = add(glue, mul(dir, STEM * curl.k * mm));
+        x.globalAlpha = 1; ribbon(x, glue, add(glue, mul(dir, STEM * curl.k * mm * 0.5)), stemEnd, u.d * Math.sqrt(u.n) * 1.15 * mm, 1);
+        const open = wz ? 0.06 : Math.min(0.6, 0.05 * u.n + 0.08) * lerp(0.85, 1.1, r());
+        for (let j = 0; j < u.n; j++) {
+          const a = (j / (u.n - 1) - 0.5) * open + (r() - 0.5) * (stray ? 0.7 : 0.14);
+          const dj = norm(add(mul(dir, Math.cos(a)), mul({ x: -dir.y, y: dir.x }, Math.sin(a))));
+          x.globalAlpha = lerp(0.75, 1, r()); strand(stemEnd, dj, Math.max(0.5, extMm - STEM) * lerp(0.8, 1.04, Math.sqrt(r())), u.d);
+        }
+      }
+    }
+    // gusta crna baza: lepeze se pri korenu preklapaju u punu traku (kod nje izgleda kao ajlajner)
+    const band = cfg.liner ? 1.6 : { classic: 0.35, hybrid: 0.6, light: 0.7, medium: 0.85, mega: 1 }[cfg.type];
+    x.fillStyle = geo.lashCol[0];
+    for (const s of ["R", "L"]) {
+      const g = geo.side[s], pts = g.lid, mm = g.mmPx, a0 = Math.round(START * (pts.length - 1)), e0 = Math.round(END * (pts.length - 1));
+      for (let layer = 0; layer < 4; layer++) {
+        const hMm = lerp(0.25, 0.75, layer / 3) * band, al = Math.min(0.85, lerp(0.7, 0.15, layer / 3) * band);
+        x.globalAlpha = al; x.beginPath();
+        for (let i = a0; i <= e0; i++) { const tt = (i - a0) / (e0 - a0), taper = cfg.liner ? Math.min(1, tt / 0.1) * lerp(0.7, 1.5, tt * tt) : Math.min(1, tt / 0.12, (1 - tt) / 0.05 + 0.3); const nz = 1 + 0.18 * Math.sin(i * 1.7 + layer) + 0.12 * Math.sin(i * 4.3 + layer * 2);   // dlakava, neravna ivica
+          const q = add(pts[i], mul(normalAt(pts, i, geo.up), hMm * taper * nz * mm)); i === a0 ? x.moveTo(q.x, q.y) : x.lineTo(q.x, q.y); }
+        for (let i = e0; i >= a0; i--) { const q = sub(pts[i], mul(normalAt(pts, i, geo.up), 0.05 * mm)); x.lineTo(q.x, q.y); }
+        x.closePath(); x.fill();
+      }
+    }
+    // omekšavanje i zrno, da prati fotografiju
+    const o = document.createElement("canvas"); o.width = c.width; o.height = c.height; const ox = o.getContext("2d");
+    // blaga senka trepavica na oku i kapku: bez nje trepavice "lebde"
+    const sh = document.createElement("canvas"); sh.width = c.width; sh.height = c.height; const sx = sh.getContext("2d");
+    sx.setTransform(vw.k, 0, 0, vw.k, -vw.x0 * vw.k, -vw.y0 * vw.k); sx.lineCap = "round"; sx.lineJoin = "round";
+    for (const s of ["R", "L"]) {
+      const g = geo.side[s], pts = g.lid, a = Math.round(START * (pts.length - 1)), e = Math.round(END * (pts.length - 1));
+      sx.beginPath();
+      for (let i = a; i <= e; i++) { const q = sub(pts[i], mul(normalAt(pts, i, geo.up), g.mmPx * 0.5)); i === a ? sx.moveTo(q.x, q.y) : sx.lineTo(q.x, q.y); }
+      sx.strokeStyle = geo.lashCol[0]; sx.globalAlpha = { classic: 0.1, hybrid: 0.13, light: 0.14, medium: 0.16, mega: 0.18 }[cfg.type]; sx.lineWidth = g.mmPx * 1.3; sx.stroke();
+    }
+    // omekšaj kao da je trepavica snimljena istim telefonom: pikseli fotografije + njena mekoća, pa uvećano kao i slika
+    const bl = Math.max(0.35, Math.max(geo.blurPx * 0.6, 0.5) * vw.k);   // bar jedan piksel fotografije, kao što bi kamera razmazala tanke dlake   // tanka dlaka se na fotografiji razmaže koliko i sve ostalo
+    ox.save(); ox.filter = `blur(${(geo.side.R.mmPx * 0.6 * vw.k).toFixed(1)}px)`; ox.drawImage(sh, 0, 0); ox.restore();
+    ox.filter = `blur(${bl.toFixed(2)}px)`; ox.drawImage(c, 0, 0); ox.filter = "none"; ox.globalAlpha = 0.3; ox.drawImage(c, 0, 0);
+    const d = ox.getImageData(0, 0, o.width, o.height), a = d.data, rr = rng(99);
+    for (let i = 3; i < a.length; i += 4) if (a[i]) a[i] = Math.min(255, a[i] * (0.88 + rr() * 0.24));
+    ox.putImageData(d, 0, 0);
+    o.vkey = vkey();
+    return o;
+  }
+
+  let view = "eyes";
+  function setView() {
+    if (editing && vw && vw.frozen) { return vw.k; }
+    const face = view === "face";
+    const pts = face ? geo.side.R.face : ["R", "L"].flatMap((s) => [...geo.side[s].lid, ...($("showBrow").checked ? geo.side[s].brow : [])]);
+    const pad = geo.ipd * (face ? 0.35 : (typeof fsOn !== "undefined" && fsOn) ? 0.12 : 0.42);   // u celom ekranu tešnji kadar: veće oči
+    const fsTight = !face && typeof fsOn !== "undefined" && fsOn, padUp = fsTight ? geo.ipd * 0.36 : pad * (face ? 1.2 : 0.8), padDn = fsTight ? geo.ipd * 0.2 : pad * (face ? 0.4 : 0.75);
+    const x0 = Math.max(0, Math.min(...pts.map((p) => p.x)) - pad), y0 = Math.max(0, Math.min(...pts.map((p) => p.y)) - padUp);
+    const x1 = Math.min(img.width, Math.max(...pts.map((p) => p.x)) + pad), y1 = Math.min(img.height, Math.max(...pts.map((p) => p.y)) + padDn);
+    const k = Math.min(4, 1400 / (x1 - x0)), W = Math.round((x1 - x0) * k), H = Math.round((y1 - y0) * k);
+    const rows = B.compare && !showBefore ? 2 : 1, gapPx = rows > 1 ? Math.round(W * 0.012) : 0, TH = H * rows + gapPx * (rows - 1);
+    if (cv.width !== W || cv.height !== TH) { cv.width = W; cv.height = TH; }
+    vw = { k, x0, y0, H, gapPx };
+    return k;
+  }
+  let vw = null;
+  const vkey = () => `${vw.k.toFixed(4)}|${vw.x0.toFixed(1)}|${vw.y0.toFixed(1)}|${cv.width}`;
+  const row = (r) => ctx.setTransform(vw.k, 0, 0, vw.k, -vw.x0 * vw.k, -vw.y0 * vw.k + r * (vw.H + vw.gapPx));
+
+  function draw() {
+    if (!img) return;
+    if (!geo) { cv.width = img.width; cv.height = img.height; ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.drawImage(img, 0, 0); return; }
+    const k = setView();
+    ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.fillStyle = getComputedStyle(stage).backgroundColor; ctx.fillRect(0, 0, cv.width, cv.height);
+    const rows = B.compare && !showBefore ? [["A", cfgA()], ["B", cfgB()]] : [["A", cfgA()]];
+    rows.forEach(([name, cfg], r) => {
+      row(r);
+      ctx.save(); ctx.beginPath(); ctx.rect(vw.x0, vw.y0, cv.width / k, vw.H / k); ctx.clip();
+      ctx.drawImage(img, 0, 0);
+      if (!showBefore && !(editing && dragging)) {
+        if (name === "A") { if (!layer || layer.vkey !== vkey()) layer = renderLashes(cfg); }
+        else if (!layerB || layerB.vkey !== vkey()) layerB = renderLashes(cfg);
+        ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, r * (vw.H + vw.gapPx)); ctx.drawImage(name === "A" ? layer : layerB, 0, 0); ctx.restore();
+        if ($("showZones").checked) drawZones(k, cfg);
+        if ($("showMeas").checked) drawMeas(k);
+        if ($("showBrow").checked) drawBrow(k);
+        if ($("showFlick").checked) drawFlick(k);
+        if (editing) drawHandles(k);
+      }
+      ctx.restore();
+      if (rows.length > 1) tagRow(r, name, cfg, name === "A" ? (st.len.L.every((v, i) => v === st.len.R[i]) ? styleName(st.len.L) : "Po meri") : STYLE_NAMES[B.style]);
+    });
+  }
+  function styleName(arr) { const m = Object.keys(STYLES).find((k) => STYLES[k].every((v, i) => v === arr[i])); return m ? STYLE_NAMES[m] : "Po meri"; }
+  function tagRow(r, name, cfg, style) {
+    const sc = cv.width / (cv.clientWidth || cv.width), fs = 13 * sc, pad = 8 * sc;
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    const text = `${name} · ${style} · ${TYPE_NAMES[cfg.type]} · ${cfg.curl}`;
+    ctx.font = `600 ${fs}px "IBM Plex Sans", system-ui, sans-serif`;
+    const w = ctx.measureText(text).width + pad * 2, y = r * (vw.H + vw.gapPx) + pad;
+    ctx.fillStyle = "rgba(20,14,16,.75)"; ctx.beginPath(); ctx.roundRect ? ctx.roundRect(pad, y, w, fs + pad * 1.4, 6 * sc) : ctx.rect(pad, y, w, fs + pad * 1.4); ctx.fill();
+    ctx.fillStyle = "#fff"; ctx.textBaseline = "middle"; ctx.fillText(text, pad * 2, y + (fs + pad * 1.4) / 2);
+  }
+  function polyline(pts, w, color, dash) {
+    ctx.save(); ctx.beginPath(); pts.forEach((p, i) => i ? ctx.lineTo(p.x, p.y) : ctx.moveTo(p.x, p.y));
+    ctx.setLineDash(dash || []); ctx.lineCap = "round"; ctx.lineJoin = "round";
+    ctx.strokeStyle = "rgba(0,0,0,.45)"; ctx.lineWidth = w * 2.2; ctx.stroke(); ctx.strokeStyle = color; ctx.lineWidth = w; ctx.stroke(); ctx.restore();
+  }
+  function dotAt(p, r, color) {
+    ctx.save(); ctx.beginPath(); ctx.arc(p.x, p.y, r, 0, 7); ctx.fillStyle = color; ctx.strokeStyle = "rgba(0,0,0,.6)"; ctx.lineWidth = r * 0.4; ctx.fill(); ctx.stroke(); ctx.restore();
+  }
+  function drawBrow(k) {
+    const ps = pxScale(k), cyan = "#29d3e8", pink = "#ff3d8b";
+    for (const s of ["R", "L"]) {
+      const g = geo.side[s];
+      for (const key of ["start", "arch", "end"]) polyline([g.ala, add(g.hits[key], mul(sub(g.hits[key], g.ala), 0.1))], 1.2 * ps, cyan, [5 * ps, 4 * ps]);
+      polyline(g.brow, 2 * ps, pink);
+      dotAt(g.ala, 3 * ps, cyan);
+      [["start", "1"], ["arch", "2"], ["end", "3"]].forEach(([key, n]) => { dotAt(g.hits[key], 3.5 * ps, "#fff"); label(n, add(g.hits[key], mul(geo.up, 11 * ps)), 12 * ps); });
+    }
+    // linija između lukova: pokazuje da li su obrve u istoj visini
+    polyline([geo.side.R.hits.arch, geo.side.L.hits.arch], 1 * ps, "#fff", [2 * ps, 4 * ps]);
+  }
+  function drawFlick(k) {
+    const ps = pxScale(k);
+    for (const s of ["R", "L"]) {
+      const g = geo.side[s], d = norm(sub(g.hits.end, g.outer)), L = len(sub(g.hits.end, g.outer));
+      polyline([g.outer, add(g.outer, mul(d, L * 0.85))], 1.6 * ps, "#ffd23f", [6 * ps, 4 * ps]);
+      dotAt(g.outer, 3 * ps, "#ffd23f");
+    }
+  }
+  const pxScale = (k) => (cv.width / (cv.clientWidth || cv.width)) / k;   // veličina slova kao na ekranu
+  function drawZones(k, cfg) {
+    const fs = 13 * pxScale(k);
+    for (const s of ["R", "L"]) {
+      const g = geo.side[s], pts = g.lid;
+      // linija kapka i granice zona
+      ctx.save(); ctx.lineCap = "round"; ctx.lineJoin = "round"; ctx.beginPath();
+      const a = Math.round(START * (pts.length - 1)), e = Math.round(END * (pts.length - 1));
+      for (let i = a; i <= e; i++) i === a ? ctx.moveTo(pts[i].x, pts[i].y) : ctx.lineTo(pts[i].x, pts[i].y);
+      const ps = pxScale(k); ctx.strokeStyle = "rgba(0,0,0,.4)"; ctx.lineWidth = 3 * ps; ctx.stroke(); ctx.strokeStyle = "#ffd23f"; ctx.lineWidth = 1.4 * ps; ctx.stroke(); ctx.restore();
+      const nz = cfg.len[s].length;
+      for (let z = 0; z <= nz; z++) {
+        const t = START + (END - START) * z / nz, i = Math.round(t * (pts.length - 1)), n = normalAt(pts, i, geo.up);
+        line(sub(pts[i], mul(n, g.mmPx * 0.8)), add(pts[i], mul(n, g.mmPx * 1.6)), 1.1 * pxScale(k), "#ffd23f");
+      }
+      for (let z = 0; z < nz; z++) {
+        const t = START + (END - START) * (z + 0.5) / nz, i = Math.round(t * (pts.length - 1)), n = normalAt(pts, i, geo.up);
+        const arr = cfg.len[s], lz = lengthAt(t, arr);
+        const p = add(add(pts[i], mul(n, lz * g.mmPx * 0.6 + fs)), mul(g.outward, lz * g.mmPx * 0.25 * t));
+        ctx.save(); ctx.font = `600 ${fs}px "IBM Plex Mono", monospace`; ctx.textAlign = "center"; ctx.textBaseline = "middle";
+        ctx.lineWidth = fs * 0.3; ctx.strokeStyle = "rgba(0,0,0,.7)"; ctx.strokeText(arr[z], p.x, p.y);
+        ctx.fillStyle = "#fff"; ctx.fillText(arr[z], p.x, p.y); ctx.restore();
+      }
+    }
+  }
+  const redraw = () => { layer = null; layerB = null; draw(); };
+
+  // ---------- analiza oka ----------
+  const STYLE_NAMES = { natural: "Natural", cat: "Cat eye", doll: "Doll eye", squirrel: "Squirrel", wispy: "Wispy", liner: "Eyeliner efekat" };
+  function analyzeEyes() {
+    // levo/desno onako kako se vidi na slici (radi i za selfije u ogledalu)
+    const kL = geo.side.R.inner.x < geo.side.L.inner.x ? "R" : "L", kR = kL === "R" ? "L" : "R"; geo.imgLeft = kL;
+    const L = geo.side[kL], R = geo.side[kR], w = (L.width + R.width) / 2, o = (L.open + R.open) / 2, tilt = (L.tilt + R.tilt) / 2;
+    const ratio = geo.gap / w, shape = o / w;
+    const tags = [], why = [];
+    const set = ratio < 0.9 ? "blisko postavljene" : ratio > 1.12 ? "široko postavljene" : "uravnotežen razmak";
+    const form = shape > 0.4 ? "okrugle" : "bademaste";
+    const slope = tilt < -2 ? "spušten spoljni ugao" : tilt > 5 ? "podignut spoljni ugao" : "ravne";
+    tags.push(set, form, slope);
+    let pick = "natural";
+    if (slope === "spušten spoljni ugao") { pick = "squirrel"; why.push("podiže spoljni ugao"); }
+    else if (set === "blisko postavljene") { pick = "cat"; why.push("izdužuje oko ka spolja"); }
+    else if (set === "široko postavljene") { pick = "doll"; why.push("naglašava sredinu oka"); }
+    else if (form === "okrugle") { pick = "cat"; why.push("izdužuje okruglo oko"); }
+    else why.push("bademasto oko nosi većinu stilova");
+    const row = (name, a, b) => `<span>${name}</span><span class="v">${a}</span><span class="v">${b}</span>`;
+    $("meas").innerHTML = `<span class="h">Na slici</span><span class="h">Levo</span><span class="h">Desno</span>`
+      + row("Širina oka", L.width.toFixed(1) + " mm", R.width.toFixed(1) + " mm")
+      + row("Otvor oka", L.open.toFixed(1) + " mm", R.open.toFixed(1) + " mm")
+      + row("Nagib", (L.tilt >= 0 ? "+" : "") + L.tilt.toFixed(0) + "°", (R.tilt >= 0 ? "+" : "") + R.tilt.toFixed(0) + "°")
+      + `<span>Razmak očiju</span><span class="v full">${geo.gap.toFixed(1)} mm</span>`;
+    $("tags").innerHTML = tags.map((t) => `<span class="tag">${t}</span>`).join("");
+    $("suggest").innerHTML = `<span>Predlog: <strong>${STYLE_NAMES[pick]}</strong> — ${why[0]}</span><button class="btn" type="button" id="applySug">Primeni</button>`;
+    $("applySug").onclick = () => setStyle(pick);
+    const tips = [], dW = L.width - R.width, dO = L.open - R.open, dA = L.archH - R.archH;
+    const act = [];
+    if (Math.abs(dO) >= 0.8) { const eye = dO < 0 ? kL : kR; act.push(() => bump(eye, [...Array(NZ).keys()].filter((i) => (i + 0.5) / NZ > 0.25 && (i + 0.5) / NZ < 0.8)));
+      tips.push(`<strong>Oko ${dO < 0 ? "levo" : "desno"} na slici je manje otvoreno</strong> (${Math.abs(dO).toFixed(1)} mm). Na njemu 1 mm duže u srednjim zonama.<button type="button" data-a="${act.length - 1}">Primeni</button>`); }
+    if (Math.abs(dW) >= 1) { const eye = dW < 0 ? kL : kR; act.push(() => bump(eye, NZ >= 7 ? [NZ - 2, NZ - 1] : [NZ - 1]));
+      tips.push(`<strong>Oko ${dW < 0 ? "levo" : "desno"} na slici je uže</strong> (${Math.abs(dW).toFixed(1)} mm). Spoljna zona na njemu 1 mm duže.<button type="button" data-a="${act.length - 1}">Primeni</button>`); }
+    if (Math.abs(dA) >= 1.5) tips.push(`<strong>Obrva ${dA < 0 ? "levo" : "desno"} na slici je niža</strong> (${Math.abs(dA).toFixed(1)} mm u luku). Dobro za razgovor o laminaciji obrva.`);
+    if (!tips.length) tips.push("<strong>Oči i obrve su ujednačene</strong>, iste dužine za oba oka su u redu.");
+    $("tips").innerHTML = tips.map((t) => `<p>${t}</p>`).join("");
+    $("tips").querySelectorAll("button[data-a]").forEach((b) => b.onclick = () => { act[+b.dataset.a](); b.disabled = true; b.textContent = "Primenjeno"; });
+    $("analysis").hidden = false;
+  }
+
+  function label(text, p, fs) {
+    ctx.save(); ctx.font = `600 ${fs}px "IBM Plex Mono", monospace`; ctx.textAlign = "center"; ctx.textBaseline = "middle";
+    ctx.lineWidth = fs * 0.3; ctx.strokeStyle = "rgba(0,0,0,.7)"; ctx.strokeText(text, p.x, p.y);
+    ctx.fillStyle = "#fff"; ctx.fillText(text, p.x, p.y); ctx.restore();
+  }
+  function line(a, b, w, color, dash) {
+    ctx.save(); ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.setLineDash(dash || []); ctx.lineCap = "round";
+    ctx.strokeStyle = "rgba(0,0,0,.45)"; ctx.lineWidth = w * 2.2; ctx.stroke(); ctx.strokeStyle = color; ctx.lineWidth = w; ctx.stroke(); ctx.restore();
+  }
+  function drawMeas(k) {
+    const w = 1.6 * pxScale(k), fs = 12 * pxScale(k), c = "#29d3e8";
+    for (const s of ["R", "L"]) {
+      const g = geo.side[s], low = Math.min(dot(g.inner, geo.up), dot(g.outer, geo.up)) - g.mmPx * 6;
+      const drop = (p) => add(p, mul(geo.up, low - dot(p, geo.up)));
+      const a = drop(g.inner), b = drop(g.outer);
+      line(g.inner, a, w * 0.7, c, [4 / k, 4 / k]); line(g.outer, b, w * 0.7, c, [4 / k, 4 / k]); line(a, b, w, c);
+      label(g.width.toFixed(1) + " mm", add(mul(add(a, b), 0.5), mul(geo.up, -fs * 0.9)), fs);
+      line(g.top, g.bottom, w, c);
+    }
+    const R = geo.side.R, L = geo.side.L;
+    const low = Math.min(...[R.inner, L.inner].map((p) => dot(p, geo.up))) - R.mmPx * 9;
+    const drop = (p) => add(p, mul(geo.up, low - dot(p, geo.up)));
+    const a = drop(R.inner), b = drop(L.inner);
+    line(R.inner, a, w * 0.7, "#ffd23f", [4 / k, 4 / k]); line(L.inner, b, w * 0.7, "#ffd23f", [4 / k, 4 / k]);
+    line(a, b, w, "#ffd23f"); label(geo.gap.toFixed(1) + " mm", add(mul(add(a, b), 0.5), mul(geo.up, -fs * 0.9)), fs);
+  }
+
+  // ---------- kontrole ----------
+  function renderZones() {
+    const box = $("zoneRows"); box.innerHTML = "";
+    const left = (geo && geo.imgLeft) || "R", right = left === "R" ? "L" : "R";
+    const rows = st.split ? [[left, "Oko levo na slici"], [right, "Oko desno na slici"]] : [[null, ""]];
+    for (const [eye, name] of rows) {
+      const wrap = document.createElement("div"); wrap.className = "zrow";
+      if (name) wrap.innerHTML = `<span class="zname">${name}</span>`;
+      const grid = document.createElement("div"); grid.className = "zones" + (NZ > 6 ? " dense" : ""); grid.style.setProperty("--nz", NZ);
+      const arr = st.len[eye || "R"];
+      arr.forEach((v, i) => {
+        const el = document.createElement("div"); el.className = "step";
+        el.innerHTML = `<button type="button" aria-label="Duže, zona ${i + 1}">+</button><output>${v}</output><button type="button" aria-label="Kraće, zona ${i + 1}">−</button><small>${NZ > 6 ? "" : "zona "}${i + 1}</small>`;
+        const [plus, minus] = el.querySelectorAll("button");
+        const change = (d) => { for (const e of eye ? [eye] : ["L", "R"]) st.len[e][i] = Math.min(16, Math.max(5, st.len[e][i] + d)); markStyle(); renderZones(); redraw(); };
+        plus.onclick = () => change(1); minus.onclick = () => change(-1);
+        grid.appendChild(el);
+      });
+      wrap.appendChild(grid); box.appendChild(wrap);
+    }
+  }
+  function markStyle() {
+    if (typeof drawCurl === "function") setTimeout(drawCurl, 0);
+    const same = st.len.L.every((v, i) => v === st.len.R[i]);
+    const m = same && Object.keys(STYLES).find((k) => STYLES[k].every((v, i) => v === st.len.L[i]));
+    $("styles").querySelectorAll(".chip").forEach((c) => c.setAttribute("aria-pressed", String(c.dataset.v === m)));
+  }
+  function setStyle(v) { st.len = { L: [...STYLES[v]], R: [...STYLES[v]] }; markStyle(); renderZones(); redraw(); }
+  function bump(eye, zones) {
+    st.split = true; $("split").checked = true;
+    zones.forEach((z) => st.len[eye][z] = Math.min(16, st.len[eye][z] + 1)); markStyle(); renderZones(); redraw();
+  }
+  function chipGroup(id, fn) {
+    $(id).addEventListener("click", (e) => {
+      const c = e.target.closest(".chip"); if (!c) return;
+      $(id).querySelectorAll(".chip").forEach((x) => x.setAttribute("aria-pressed", String(x === c)));
+      fn(c.dataset.v); redraw();
+    });
+  }
+  chipGroup("styles", (v) => { st.len = { L: [...STYLES[v]], R: [...STYLES[v]] }; renderZones(); });
+  chipGroup("bStyles", (v) => { B.style = v; });
+  chipGroup("nzones", (v) => {
+    const was = Object.keys(STYLE_BASE).find((k) => styleArr(k).every((x, i) => x === st.len.L[i]) && styleArr(k).every((x, i) => x === st.len.R[i]));
+    NZ = +v;
+    st.len = was ? { L: styleArr(was), R: styleArr(was) } : { L: resampleArr(st.len.L, NZ), R: resampleArr(st.len.R, NZ) };
+    markStyle(); renderZones();
+  });
+  chipGroup("bTypes", (v) => { B.type = v; });
+  chipGroup("bCurls", (v) => { B.curl = v; });
+  $("split").addEventListener("change", (e) => {
+    st.split = e.target.checked;
+    if (!st.split) st.len.L = [...st.len.R].map((v, i) => Math.max(v, st.len.L[i])), st.len.R = [...st.len.L];
+    markStyle(); renderZones(); redraw();
+  });
+  $("compare").addEventListener("change", (e) => { B.compare = e.target.checked; $("bBox").hidden = !B.compare; draw(); });
+  chipGroup("types", (v) => { st.type = v; });
+  chipGroup("curls", (v) => { st.curl = v; drawCurl(); });
+
+  // ---------- pogled sa strane: kako uvijenost menja oblik trepavice ----------
+  // ugao savijanja (koliko se trepavica ukupno okrene): C ~60°, CC ~65°, D ~70°; L: ravna baza pa oštar prelom
+  const CURL_SHAPE = { C: { deg: 50 }, CC: { deg: 65 }, D: { deg: 80 }, L: { deg: 72, straight: 0.3, bendLen: 0.15 } };   // L: ravna baza, kratak oštar prelom, pa pravo nagore
+  function lashPath(type, Lmm) {
+    const sh = CURL_SHAPE[type], pts = [];
+    let x = 0, y = 0, a = 10 * Math.PI / 180;            // trepavica kreće iz kapka skoro vodoravno, blago nagore
+    const N = 60, straight = sh.straight || 0, theta = sh.deg * Math.PI / 180;
+    for (let i = 0; i <= N; i++) {
+      pts.push([x, y]);
+      const ds = Lmm / N, u = i / N;
+      x += Math.cos(a) * ds; y += Math.sin(a) * ds;
+      const bl = sh.bendLen || (1 - straight);
+      if (u >= straight && u < straight + bl) a += theta / (N * bl);
+    }
+    return pts;
+  }
+  function drawCurl() {
+    const c = $("curlCv"); if (!c) return; const g = c.getContext("2d"), W = c.width, H = c.height;
+    const css = getComputedStyle(document.documentElement), ink = css.getPropertyValue("--ink").trim(), mut = css.getPropertyValue("--muted").trim(), acc = css.getPropertyValue("--accent").trim(), line = css.getPropertyValue("--line").trim();
+    const Lmm = Math.max(...st.len.L, ...st.len.R);         // najduža izabrana dužina
+    const S = 15, ox = 150, oy = 225;                      // 1 mm = 15 px; koren trepavice na (ox, oy)
+    const P = (x, y) => [ox + x * S, oy - y * S];
+    g.clearRect(0, 0, W, H);
+    // mreža u mm (oznake desno)
+    g.strokeStyle = line; g.lineWidth = 1; g.font = "17px system-ui, sans-serif"; g.fillStyle = mut; g.textAlign = "right";
+    for (let mm = 0; mm <= 12; mm += 2) { const [, yy] = P(0, mm); g.beginPath(); g.moveTo(ox, yy); g.lineTo(W - 70, yy); g.stroke(); g.fillText(mm + " mm", W - 8, yy + 6); }
+    g.textAlign = "left";
+    // oko: deo jabučice; kapak: koža iznad, sa ivicom na korenu trepavice
+    g.save(); g.beginPath(); g.rect(0, 0, ox + 4, H); g.clip();
+    g.fillStyle = mut; g.globalAlpha = 0.22; g.beginPath(); g.arc(ox - 168, oy + 70, 182, 0, 7); g.fill();
+    g.globalAlpha = 0.45; g.beginPath(); g.moveTo(0, oy - 95); g.quadraticCurveTo(ox - 40, oy - 70, ox, oy); g.quadraticCurveTo(ox - 60, oy + 8, 0, oy + 2); g.closePath(); g.fill();
+    g.restore(); g.globalAlpha = 1;
+    g.fillStyle = ink; g.fillText("kapak", 14, oy - 40); g.fillText("oko", 40, oy + 70);
+    // sve uvijenosti blede, izabrana jasno
+    for (const k of Object.keys(CURL_SHAPE)) {
+      const pts = lashPath(k, Lmm), sel = k === st.curl;
+      g.strokeStyle = sel ? acc : mut; g.globalAlpha = sel ? 1 : 0.35; g.lineWidth = sel ? 5 : 2.5;
+      g.beginPath(); pts.forEach(([x, y], i) => { const [px, py] = P(x, y); i ? g.lineTo(px, py) : g.moveTo(px, py); }); g.stroke();
+      const [tx, ty] = P(...pts[pts.length - 1]); g.fillStyle = sel ? acc : mut; g.fillText(k, tx + 8, ty + 6);
+    }
+    g.globalAlpha = 1;
+    const tip = lashPath(st.curl, Lmm).at(-1);
+    $("curlCap").textContent = `Pogled sa strane, ${Lmm} mm trepavica: vrh je ${tip[1].toFixed(1)} mm iznad kapka i ${tip[0].toFixed(1)} mm ispred oka. Jača uvijenost = vrh viši i bliže kapku, oko izgleda otvorenije.`;
+  }
+  drawCurl();
+  matchMedia("(prefers-color-scheme: dark)").addEventListener?.("change", drawCurl);
+  $("showZones").addEventListener("change", draw);
+  ["showMeas", "showBrow", "showFlick"].forEach((id) => $(id).addEventListener("change", draw));
+  chipGroup("views", (v) => { view = v; });
+  let rz; window.addEventListener("resize", () => { clearTimeout(rz); rz = setTimeout(() => { if (vw) vw.frozen = false; layer = null; layerB = null; draw(); if (editing && vw) vw.frozen = true; }, 150); });
+  renderZones();
+
+  const b4 = $("before");
+  const setB = (v) => { showBefore = v; b4.textContent = v ? "Prikaži POSLE" : "Prikaži PRE"; b4.setAttribute("aria-pressed", String(v)); draw(); };
+  b4.addEventListener("click", () => setB(!showBefore));
+
+  // ---------- učitavanje ----------
+  function initMesh() {
+    if (ready) return ready;
+    const fm = new FaceMesh({ locateFile: (f) => f.endsWith(".js") ? CDN + f : f.endsWith(".wasm") ? f : f + ".wasm" });
+    fm.setOptions({ maxNumFaces: 1, refineLandmarks: true, minDetectionConfidence: 0.5, minTrackingConfidence: 0.5 });
+    ready = fm.initialize().then(() => fm); return ready;
+  }
+  // krupan plan (bez brade) detektor ne prepozna: umanji sliku u veći kadar i probaj ponovo
+  async function findFace(fm) {
+    const tries = [[1, 0], [1.7, 0.25], [2.4, 0.2], [3.2, 0.15], [2.4, 0.4]];
+    const avg = (() => { const c = document.createElement("canvas"); c.width = c.height = 1; const x = c.getContext("2d"); x.drawImage(img, 0, 0, 1, 1); const d = x.getImageData(0, 0, 1, 1).data; return `rgb(${d[0]},${d[1]},${d[2]})`; })();
+    let best = null;
+    for (const [pad, top] of tries) {
+      let src = img, ox = 0, oy = 0, W = img.width, H = img.height;
+      if (pad > 1) {
+        W = Math.round(img.width * pad); H = Math.round(Math.max(img.height * pad, W * 0.9));
+        ox = (W - img.width) / 2; oy = (H - img.height) * top;
+        src = document.createElement("canvas"); src.width = W; src.height = H; const x = src.getContext("2d");
+        x.fillStyle = avg; x.fillRect(0, 0, W, H); x.drawImage(img, ox, oy);
+      }
+      const res = await new Promise((resolve, reject) => { fm.onResults(resolve); fm.send({ image: src }).catch(reject); });
+      const f = res.multiFaceLandmarks && res.multiFaceLandmarks[0];
+      if (f) {
+        const first = pad > 1 ? f.map((p) => ({ x: (p.x * W - ox) / img.width, y: (p.y * H - oy) / img.height, z: p.z })) : f;
+        for (const c of [first, await refine(fm, first, avg)]) {
+          if (!c) continue;
+          const q = fitScore(c); if (!best || q < best.q) best = { q, c };
+        }
+      }
+    }
+    if (best) console.log("[lash] fit", best.q.toFixed(2));
+    return best ? best.c : null;
+  }
+  // koliko dobro linija kapka leži na tamnoj liniji trepavica (manje = bolje):
+  // svetlina na liniji minus svetlina malo iznad nje, na samoj fotografiji
+  let lumData = null;
+  function lumAt(x, y) {
+    if (!lumData) lumData = img.getContext("2d").getImageData(0, 0, img.width, img.height).data;
+    const xi = Math.max(0, Math.min(img.width - 1, Math.round(x))), yi = Math.max(0, Math.min(img.height - 1, Math.round(y))), i = (yi * img.width + xi) * 4;
+    return lumData[i] * 0.3 + lumData[i + 1] * 0.59 + lumData[i + 2] * 0.11;
+  }
+  function fitScore(f) {
+    const P = (i) => ({ x: f[i].x * img.width, y: f[i].y * img.height });
+    let sc = 0, n = 0;
+    for (const [lid, iris, ring] of [[IDX.R.lid, 468, [469, 470, 471, 472]], [IDX.L.lid, 473, [474, 475, 476, 477]]]) {
+      const c = P(iris), rr = ring.map(P).reduce((m, p) => m + len(sub(p, c)), 0) / 4 || 1;
+      const pts = resample(catmull(lid.map(P)), 24).slice(3, -3);
+      for (const p of pts) {
+        const up = norm(sub(p, c)), on = Math.min(lumAt(p.x, p.y), lumAt(p.x - up.x * rr * 0.12, p.y - up.y * rr * 0.12), lumAt(p.x + up.x * rr * 0.12, p.y + up.y * rr * 0.12));
+        sc += on - lumAt(p.x + up.x * rr * 0.75, p.y + up.y * rr * 0.75); n++;
+      }
+    }
+    return sc / n;
+  }
+  // drugi prolaz: celo (procenjeno) lice uokviri kao na normalnoj slici i ponovo izračunaj tačke
+  async function refine(fm, pts, avg) {
+    const xs = pts.map((p) => p.x * img.width), ys = pts.map((p) => p.y * img.height);
+    const fx0 = Math.min(...xs), fx1 = Math.max(...xs), fy0 = Math.min(...ys), fy1 = Math.max(...ys);
+    const fw = fx1 - fx0, fh = fy1 - fy0, side = Math.max(fw, fh) * 1.8;
+    if (fx0 > 0 && fy0 > 0 && fx1 < img.width && fy1 < img.height && side < Math.min(img.width, img.height) * 1.2) return null;  // lice je ceo u kadru
+    const cx = (fx0 + fx1) / 2, cy = (fy0 + fy1) / 2, S = Math.round(Math.min(1600, side)), k = S / side;
+    const c = document.createElement("canvas"); c.width = c.height = S; const x = c.getContext("2d");
+    x.fillStyle = avg; x.fillRect(0, 0, S, S);
+    const ox = S / 2 - cx * k, oy = S / 2 - cy * k; x.drawImage(img, ox, oy, img.width * k, img.height * k);
+    const res = await new Promise((resolve, reject) => { fm.onResults(resolve); fm.send({ image: c }).catch(reject); });
+    const f = res.multiFaceLandmarks && res.multiFaceLandmarks[0];
+    return f ? f.map((p) => ({ x: (p.x * S - ox) / k / img.width, y: (p.y * S - oy) / k / img.height, z: p.z })) : null;
+  }
+  async function analyze() {
+    lm = null; geo = null; layer = null; lumData = null; $("analysis").hidden = true; draw();
+    setStatus("Pripremam… (prvi put traje par sekundi)");
+    try {
+      const fm = await initMesh(); setStatus("Tražim oči…");
+      const face = await findFace(fm);
+      if (!face) { setStatus("Ne vidim lice na slici. Probaj fotografiju spreda, sa oba oka otvorena."); return; }
+      if (editing) setEditing(false);
+      lm = face; geo = computeGeo(); setStatus(""); analyzeEyes(); $("noAnalysis").hidden = true; renderZones(); draw();
+    } catch (e) { console.error(e); setStatus("Nešto nije u redu. Osveži stranicu i probaj ponovo."); }
+  }
+  function loadFile(file) {
+    if (!file || !file.type.startsWith("image/")) { hint("To nije slika. Izaberi fotografiju (JPG ili PNG)."); return; }
+    const im = new Image();
+    im.onload = () => {
+      const k = Math.min(1, 1600 / Math.max(im.naturalWidth, im.naturalHeight));
+      const c = document.createElement("canvas"); c.width = Math.round(im.naturalWidth * k); c.height = Math.round(im.naturalHeight * k);
+      c.getContext("2d").drawImage(im, 0, 0, c.width, c.height); img = c;
+      $("empty").hidden = true; cv.hidden = false; $("overlay").hidden = false; document.body.classList.add("has-photo"); stage.classList.add("loaded"); analyze();
+      if (matchMedia("(max-width: 860px)").matches) stage.scrollIntoView({ behavior: "smooth", block: "start" });
+    };
+    im.onerror = () => hint("Ne mogu da otvorim ovu sliku. Probaj drugu.");
+    im.src = URL.createObjectURL(file);
+  }
+  $("pick").onclick = () => $("file").click();
+  $("newPhoto").onclick = () => $("file").click();
+
+  // ---------- ručna popravka linije kapka: 3 tačke po oku (unutra, sredina, spolja) ----------
+  let editing = false, dragging = null;
+  const HIDX = (n) => [0, Math.round((n - 1) * 0.45), Math.round((n - 1) * 0.94)];
+  function applyAdj(g) {
+    const n = g.lidAuto.length, [i0, i1, i2] = HIDX(n), d = g.adj;
+    // pomak se glatko raspodeli duž kapka (kroz tri tačke)
+    const at = (i) => {
+      if (i <= i1) { const u = i / i1, w = u * u * (3 - 2 * u); return { x: d[0].x + (d[1].x - d[0].x) * w, y: d[0].y + (d[1].y - d[0].y) * w }; }
+      const u = Math.min(1, (i - i1) / (i2 - i1)), w = u * u * (3 - 2 * u); return { x: d[1].x + (d[2].x - d[1].x) * w, y: d[1].y + (d[2].y - d[1].y) * w };
+    };
+    g.lid = g.lidAuto.map((p, i) => add(p, at(i)));
+  }
+  function handlePts() {
+    const out = [];
+    for (const s of ["R", "L"]) { const g = geo.side[s]; HIDX(g.lid.length).forEach((i, h) => out.push({ s, h, p: g.lid[i] })); }
+    return out;
+  }
+  function drawHandles(k) {
+    const ps = pxScale(k);
+    for (const s of ["R", "L"]) polyline(geo.side[s].lid, 2 * ps, "#ffd23f");
+    for (const q of handlePts()) {
+      ctx.save(); ctx.beginPath(); ctx.arc(q.p.x, q.p.y, 11 * ps, 0, 7); ctx.fillStyle = "rgba(255,210,63,.35)"; ctx.fill();
+      ctx.lineWidth = 2.5 * ps; ctx.strokeStyle = "#fff"; ctx.stroke(); ctx.beginPath(); ctx.arc(q.p.x, q.p.y, 3 * ps, 0, 7); ctx.fillStyle = "#fff"; ctx.fill(); ctx.restore();
+    }
+  }
+  const toImg = (e) => { const r = cv.getBoundingClientRect(), cx = (e.clientX - r.left) * cv.width / r.width, cy = (e.clientY - r.top) * cv.height / r.height; return { x: cx / vw.k + vw.x0, y: cy / vw.k + vw.y0 }; };
+  function setEditing(on) {
+    if (!geo) return;
+    editing = on; dragging = null;
+    $("editBtn").setAttribute("aria-pressed", String(on)); $("editBtn").textContent = on ? "Gotovo" : "Podesi oči";
+    stage.classList.toggle("editing", on); $("editHint").hidden = !on;
+    if (on) { setView(); vw.frozen = true; } else if (vw) vw.frozen = false;
+    layer = null; layerB = null; draw();
+  }
+  // ---------- ceo ekran ----------
+  let fsOn = false, fsAuto = false;
+  function setFs(on) {
+    fsOn = on; stage.classList.toggle("fs", on); document.body.classList.toggle("fs-open", on);
+    $("fsBtn").textContent = on ? "Zatvori" : "Ceo ekran"; $("fsBtn").setAttribute("aria-pressed", String(on));
+    try { if (on && stage.requestFullscreen && !document.fullscreenElement) stage.requestFullscreen().catch(() => {}); if (!on && document.fullscreenElement) document.exitFullscreen().catch(() => {}); } catch (e) {}
+    requestAnimationFrame(() => { if (vw) vw.frozen = false; layer = null; layerB = null; draw(); if (editing && vw) vw.frozen = true; });
+  }
+  $("fsBtn").onclick = () => { if (fsOn && editing) setEditing(false); fsAuto = false; setFs(!fsOn); };
+  document.addEventListener("fullscreenchange", () => { if (!document.fullscreenElement && fsOn) { if (editing) setEditing(false); setFs(false); } });
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape" && fsOn) { if (editing) setEditing(false); setFs(false); } });
+  $("editBtn").onclick = () => {
+    if (!editing) { if (!fsOn) { fsAuto = true; setFs(true); } setEditing(true); }
+    else { setEditing(false); if (fsAuto) { fsAuto = false; setFs(false); } }
+  };
+  cv.addEventListener("pointerdown", (e) => {
+    if (!editing || !geo) return;
+    const p = toImg(e), tol = 28 * (cv.width / cv.getBoundingClientRect().width) / vw.k;
+    let best = null, bd = tol;
+    for (const q of handlePts()) { const d = len(sub(q.p, p)); if (d < bd) { bd = d; best = q; } }
+    if (!best) return;
+    e.preventDefault(); cv.setPointerCapture(e.pointerId);
+    const g = geo.side[best.s];
+    dragging = { s: best.s, h: best.h, start: p, adj0: { ...g.adj[best.h] } };
+  });
+  let raf = 0;
+  cv.addEventListener("pointermove", (e) => {
+    if (!dragging) return; e.preventDefault();
+    const p = toImg(e), g = geo.side[dragging.s];
+    g.adj[dragging.h] = { x: dragging.adj0.x + p.x - dragging.start.x, y: dragging.adj0.y + p.y - dragging.start.y };
+    applyAdj(g);
+    if (!raf) raf = requestAnimationFrame(() => { raf = 0; draw(); });
+  });
+  const endDrag = () => { if (!dragging) return; dragging = null; layer = null; layerB = null; draw(); };
+  cv.addEventListener("pointerup", endDrag); cv.addEventListener("pointercancel", endDrag);
+  // kartice
+  document.querySelectorAll(".tab").forEach((t) => t.addEventListener("click", () => {
+    document.querySelectorAll(".tab").forEach((x) => x.setAttribute("aria-selected", String(x === t)));
+    document.querySelectorAll(".tabpane").forEach((p) => p.hidden = p.dataset.pane !== t.dataset.tab);
+    if (t.dataset.tab === "set") drawCurl();
+  }));
+  $("curlToggle").addEventListener("click", (e) => {
+    const f = $("curlFig"), open = f.hidden; f.hidden = !open; e.currentTarget.setAttribute("aria-expanded", String(open));
+    e.currentTarget.textContent = open ? "sakrij crtež" : "pogled sa strane"; if (open) drawCurl();
+  });
+  $("shoot").onclick = () => $("cam").click();
+  document.querySelectorAll("[data-act]").forEach((b) => b.onclick = () => $(b.dataset.act === "shoot" ? "cam" : "file").click());
+  $("cam").onchange = (e) => { loadFile(e.target.files[0]); e.target.value = ""; };
+  $("file").onchange = (e) => { loadFile(e.target.files[0]); e.target.value = ""; };
+  ["dragenter", "dragover"].forEach((t) => window.addEventListener(t, (e) => { e.preventDefault(); stage.classList.add("drag"); }));
+  ["dragleave", "drop"].forEach((t) => window.addEventListener(t, (e) => { e.preventDefault(); stage.classList.remove("drag"); }));
+  window.addEventListener("drop", (e) => {
+    const dt = e.dataTransfer, f = dt && [...dt.files].find((x) => x.type.startsWith("image/"));
+    if (f) return loadFile(f);
+    hint(dt && dt.types.includes("text/uri-list") ? "Sliku sa sajta ne mogu da prevučem. Desni klik na sliku → Kopiraj sliku, pa ovde Ctrl+V." : "Prevuci fotografiju iz foldera.");
+  });
+  window.addEventListener("paste", (e) => {
+    const items = [...(e.clipboardData?.items || [])], it = items.find((i) => i.kind === "file" && i.type.startsWith("image/"));
+    if (it) { e.preventDefault(); return loadFile(it.getAsFile()); }
+    if (items.length) hint("U clipboardu nije slika. Desni klik na sliku → Kopiraj sliku.");
+  });
+
+  window.__loadUrl = (u) => fetch(u).then((r) => r.blob()).then((b) => loadFile(new File([b], "t.png", { type: "image/png" })));
+  window.__eyes = () => geo && vw && ["R", "L"].map((s) => { const p = geo.side[s].lid, xs = p.map((q) => (q.x - vw.x0) * vw.k), ys = p.map((q) => (q.y - vw.y0) * vw.k); return [Math.min(...xs), Math.min(...ys), Math.max(...xs), Math.max(...ys)]; });
+  window.__state = () => ({ ok: !!geo, status: statusEl.textContent });
+})();
+</script>
+
+</body>
+</html>
